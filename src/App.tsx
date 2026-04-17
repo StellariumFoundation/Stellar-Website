@@ -12,7 +12,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<Tab>('home');
 
   return (
-    <div className="flex flex-col h-screen w-full bg-[var(--color-background)]">
+    <div className="flex flex-col h-screen w-full bg-transparent">
       {/* Main Content Area */}
       <div className="flex-1 overflow-hidden relative">
         {activeTab === 'home' && <HomeScreen />}
@@ -23,7 +23,7 @@ export default function App() {
       </div>
 
       {/* Bottom Navigation */}
-      <div className="bg-[#121212]/90 backdrop-blur-md border-t border-white/5 safe-bottom z-50">
+      <div className="bg-black/70 backdrop-blur-md border-t border-white/5 safe-bottom z-50">
         <div className="flex justify-around items-center h-16 px-2 max-w-lg mx-auto">
           <NavButton 
             icon={Home} 
@@ -75,12 +75,15 @@ function NavButton({
   return (
     <button 
       onClick={onClick}
-      className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors ${
-        isActive ? 'text-[var(--color-primary)]' : 'text-gray-500 hover:text-gray-400'
+      className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors relative ${
+        isActive ? 'text-[var(--color-tertiary)]' : 'text-gray-400 hover:text-white'
       }`}
     >
-      <div className={`p-1 rounded-full ${isActive ? 'bg-[var(--color-primary)]/10' : ''}`}>
-        <Icon size={20} strokeWidth={isActive ? 2.5 : 2} />
+      <div className="relative p-1 rounded-full z-10">
+        {isActive && (
+          <div className="absolute inset-0 bg-[var(--color-tertiary)]/20 blur-md rounded-full" />
+        )}
+        <Icon size={22} strokeWidth={isActive ? 2.5 : 2} className="relative z-10" />
       </div>
       <span className="text-[10px] font-medium tracking-wide">
         {label}

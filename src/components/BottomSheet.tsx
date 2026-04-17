@@ -25,9 +25,9 @@ export function BottomSheet({ isOpen, onClose, children }: BottomSheetProps) {
             animate={{ y: 0 }} 
             exit={{ y: "100%" }} 
             transition={{ type: "spring", bounce: 0, duration: 0.4 }} 
-            className="fixed bottom-0 left-0 right-0 bg-[#1E1E1E] text-white z-50 rounded-t-3xl max-h-[90vh] overflow-y-auto safe-bottom"
+            className="fixed bottom-0 left-0 right-0 bg-black/90 text-white z-50 rounded-t-3xl max-h-[90vh] overflow-y-auto safe-bottom backdrop-blur-xl border-t border-white/10"
           >
-            <div className="sticky top-0 right-0 p-4 flex justify-end bg-gradient-to-b from-[#1E1E1E] to-transparent">
+            <div className="sticky top-0 right-0 p-4 flex justify-end bg-gradient-to-b from-black/90 to-transparent">
               <button onClick={onClose} className="p-2 bg-white/10 rounded-full hover:bg-white/20 transition-colors">
                 <X size={20} />
               </button>

@@ -32,16 +32,16 @@ export function QuizScreen() {
     if (isFinished) {
       return (
         <div className="flex flex-col h-full items-center p-6 justify-center">
-           <h2 className="text-3xl text-[var(--color-primary)] font-bold">Assessment Complete</h2>
-           <p className="text-gray-400 mt-2">{activeQuiz.topicName}</p>
+           <h2 className="text-3xl text-[var(--color-primary)] font-normal text-center">Assessment Complete</h2>
+           <p className="text-[var(--color-tertiary)] mt-2">{activeQuiz.topicName}</p>
            
            <div className="text-6xl font-black text-white mt-8">{score} / {activeQuiz.questions.length}</div>
-           <p className="text-gray-400 uppercase tracking-widest text-sm mt-2">Correct Answers</p>
+           <p className="text-[var(--color-on-surface)] uppercase tracking-widest text-sm mt-2">Correct Answers</p>
 
            <div className="mt-16 w-full max-w-sm space-y-4">
               <button 
                 onClick={() => startQuiz(activeQuiz)}
-                className="w-full bg-white text-black py-4 rounded-full font-bold uppercase tracking-wider hover:bg-gray-200"
+                className="w-full bg-[var(--color-tertiary)] text-black py-4 rounded-full font-bold uppercase tracking-wider hover:bg-[var(--color-tertiary)]/90"
               >
                 Retake Quiz
               </button>
@@ -60,11 +60,11 @@ export function QuizScreen() {
     const progress = ((currentIndex) / activeQuiz.questions.length) * 100;
 
     return (
-      <div className="flex flex-col h-full w-full p-6 pt-12 items-center max-w-lg mx-auto">
+       <div className="flex flex-col h-full w-full p-6 pt-12 items-center max-w-lg mx-auto">
          <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden mb-4">
-            <div className="h-full bg-[var(--color-primary)] transition-all duration-300" style={{ width: `${progress}%` }} />
+            <div className="h-full bg-[var(--color-tertiary)] transition-all duration-300" style={{ width: `${progress}%` }} />
          </div>
-         <p className="text-sm text-gray-500 font-semibold mb-8 uppercase">Question {currentIndex + 1} of {activeQuiz.questions.length}</p>
+         <p className="text-sm text-[var(--color-tertiary)] font-semibold mb-8 uppercase">Question {currentIndex + 1} of {activeQuiz.questions.length}</p>
 
          <h3 className="text-2xl font-bold text-center text-white mb-12 leading-relaxed">
            {question.text}
@@ -87,10 +87,10 @@ export function QuizScreen() {
 
   return (
     <div className="flex flex-col h-full overflow-y-auto w-full p-6 items-center">
-      <h1 className="text-2xl text-[var(--color-primary)] font-bold text-center mt-2">
+      <h1 className="text-3xl font-normal text-center mt-2">
         Knowledge Base
       </h1>
-      <p className="text-center text-sm text-gray-400 mt-4 max-w-sm leading-relaxed">
+      <p className="text-center text-sm text-[var(--color-on-surface)] mt-4 max-w-sm leading-relaxed">
         Master the principles of the Foundation. Select a module below to test your understanding.
       </p>
 
@@ -99,9 +99,9 @@ export function QuizScreen() {
           <button
             key={idx}
             onClick={() => startQuiz(quiz)}
-            className="aspect-square bg-[#1E1E1E] border border-white/10 rounded-2xl flex items-center justify-center p-4 hover:border-white/30 transition-colors"
+            className="aspect-square bg-[var(--color-surface)] border border-white/10 rounded-2xl flex items-center justify-center p-4 hover:border-[var(--color-tertiary)] transition-colors"
           >
-            <span className="text-[var(--color-primary)] font-bold text-center uppercase tracking-wider text-sm">{quiz.topicName}</span>
+            <span className="text-[var(--color-secondary)] font-bold text-center uppercase tracking-wider text-sm">{quiz.topicName}</span>
           </button>
         ))}
       </div>

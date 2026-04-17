@@ -99,8 +99,23 @@ export function LibraryScreen() {
           </h1>
         </div>
         <div className="flex-1 overflow-y-auto p-6 md:p-12 pb-32 flex flex-col items-center max-w-3xl mx-auto w-full">
-          <div className="prose prose-invert prose-p:font-sans prose-headings:font-serif prose-a:text-[var(--color-tertiary)] prose-strong:text-[var(--color-primary)] w-full text-center">
-            <Markdown>{selectedBook.content}</Markdown>
+          <div className="w-full">
+            <Markdown
+              components={{
+                h1: ({node, ...props}) => <h1 className="text-3xl sm:text-4xl font-serif font-bold text-white text-center mt-12 mb-8 leading-tight" {...props} />,
+                h2: ({node, ...props}) => <h2 className="text-2xl sm:text-3xl font-serif font-semibold text-[var(--color-tertiary)] text-center mt-10 mb-6 border-b border-[var(--color-tertiary)]/20 pb-4" {...props} />,
+                h3: ({node, ...props}) => <h3 className="text-xl font-serif font-medium text-[var(--color-secondary)] text-center mt-8 mb-4" {...props} />,
+                p: ({node, ...props}) => <p className="text-base sm:text-lg leading-relaxed text-[var(--color-on-background)] text-center mb-6 mx-auto max-w-2xl font-sans" {...props} />,
+                a: ({node, ...props}) => <a className="text-[var(--color-tertiary)] hover:text-white underline decoration-[var(--color-tertiary)]/50 underline-offset-4 transition-colors font-semibold" {...props} />,
+                strong: ({node, ...props}) => <strong className="font-bold text-white" {...props} />,
+                ul: ({node, ...props}) => <ul className="space-y-3 mb-8 block mx-auto text-left w-full max-w-lg list-none" {...props} />,
+                ol: ({node, ...props}) => <ol className="space-y-3 mb-8 block mx-auto text-left w-full max-w-lg list-decimal list-inside text-[var(--color-on-background)]" {...props} />,
+                li: ({node, ...props}) => <li className="flex items-start text-base sm:text-lg text-[var(--color-on-background)] before:content-['✦'] before:text-[var(--color-secondary)] before:mr-3 before:font-bold" {...props} />,
+                blockquote: ({node, ...props}) => <blockquote className="border-l-4 border-[var(--color-secondary)] pl-6 py-2 my-8 italic text-lg text-white/80 max-w-2xl mx-auto bg-white/5 rounded-r-xl" {...props} />,
+              }}
+            >
+              {selectedBook.content}
+            </Markdown>
           </div>
           
           {selectedBook.notion_url && (
@@ -149,12 +164,12 @@ export function LibraryScreen() {
                  <BookOpen size={48} className="text-[var(--color-primary)] mb-4" />
                  <span className="text-lg font-bold text-white mb-4">The Stellarium Book</span>
                  <div className="flex gap-4 mb-6 w-full justify-center">
-                    <button className="flex items-center justify-center gap-2 px-4 py-2 bg-[var(--color-tertiary)]/20 text-[var(--color-tertiary)] rounded-full text-sm font-medium hover:bg-[var(--color-tertiary)]/30 transition-colors w-24">
+                    <a href="/The.Stellarium.Book.pdf" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 px-4 py-2 bg-[var(--color-tertiary)]/20 text-[var(--color-tertiary)] rounded-full text-sm font-medium hover:bg-[var(--color-tertiary)]/30 transition-colors w-24">
                       <ExternalLink size={16} /> Open
-                    </button>
-                    <button className="flex items-center justify-center gap-2 px-4 py-2 border border-white/20 text-gray-200 rounded-full text-sm font-medium hover:bg-white/5 transition-colors w-24">
+                    </a>
+                    <a href="/The.Stellarium.Book.pdf" download className="flex items-center justify-center gap-2 px-4 py-2 border border-white/20 text-gray-200 rounded-full text-sm font-medium hover:bg-white/5 transition-colors w-24">
                       <Download size={16} /> Save
-                    </button>
+                    </a>
                  </div>
                  <div className="flex gap-4 sm:gap-6 w-full justify-between sm:justify-center border-t border-white/10 pt-4">
                     <a href="https://www.amazon.com/dp/B0FLPSQ6ZS" target="_blank" rel="noopener noreferrer" className="text-xs text-[var(--color-tertiary)] uppercase font-semibold hover:text-[var(--color-primary)] transition-colors">Buy on Amazon</a>
@@ -166,12 +181,12 @@ export function LibraryScreen() {
                  <BookOpen size={48} className="text-[var(--color-primary)] mb-4" />
                  <span className="text-lg font-bold text-white mb-4">The Stellarium Society</span>
                  <div className="flex gap-4 w-full justify-center">
-                    <button className="flex items-center justify-center gap-2 px-4 py-2 bg-[var(--color-tertiary)]/20 text-[var(--color-tertiary)] rounded-full text-sm font-medium hover:bg-[var(--color-tertiary)]/30 transition-colors w-24">
+                    <a href="/Stellarium.Society.pdf" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 px-4 py-2 bg-[var(--color-tertiary)]/20 text-[var(--color-tertiary)] rounded-full text-sm font-medium hover:bg-[var(--color-tertiary)]/30 transition-colors w-24">
                       <ExternalLink size={16} /> Open
-                    </button>
-                    <button className="flex items-center justify-center gap-2 px-4 py-2 border border-white/20 text-gray-200 rounded-full text-sm font-medium hover:bg-white/5 transition-colors w-24">
+                    </a>
+                    <a href="/Stellarium.Society.pdf" download className="flex items-center justify-center gap-2 px-4 py-2 border border-white/20 text-gray-200 rounded-full text-sm font-medium hover:bg-white/5 transition-colors w-24">
                       <Download size={16} /> Save
-                    </button>
+                    </a>
                  </div>
               </div>
             </div>

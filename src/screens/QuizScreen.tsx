@@ -135,23 +135,26 @@ function QuizMenu({
       )}
 
       {!isLoading && !error && (
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 w-full max-w-2xl mt-10 pb-24">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 w-full max-w-2xl mt-8 pb-24">
           {categories.map((category, idx) => {
             const isGeneral = category.name.includes("General Knowledge");
             return (
               <button
                 key={idx}
                 onClick={() => onCategorySelected(category)}
-                className={`aspect-square border rounded-2xl flex items-center justify-center p-4 transition-colors ${
+                className={`h-24 border rounded-2xl flex flex-col items-center justify-center p-3 transition-all active:scale-95 ${
                   isGeneral 
                     ? 'bg-[var(--color-tertiary)]/20 border-[var(--color-tertiary)]/50 hover:bg-[var(--color-tertiary)]/30' 
-                    : 'bg-[var(--color-surface)] border-white/10 hover:border-[var(--color-tertiary)]'
-                } ${isGeneral ? 'col-span-full aspect-auto h-24' : ''}`}
+                    : 'bg-[var(--color-surface)] border-white/10 hover:border-[var(--color-tertiary)] hover:bg-white/5'
+                }`}
               >
-                <span className={`font-bold text-center uppercase tracking-wider text-sm ${
+                <span className={`font-bold text-center uppercase tracking-wider text-xs ${
                   isGeneral ? 'text-[var(--color-tertiary)]' : 'text-[var(--color-secondary)]'
                 }`}>
                   {category.name}
+                </span>
+                <span className="text-[10px] text-white/50 mt-2 font-medium">
+                  {category.questions.length} / {category.questions.length === 1 ? 'Question' : 'Questions'}
                 </span>
               </button>
             );

@@ -1,0 +1,44 @@
+{
+  "topics": [
+    {
+      "topicName": "Philosophy",
+      "questions": [
+        {
+          "text": "What is the primary operational mantra of The Stellarium Foundation?",
+          "options": [
+            "Think differently.",
+            "Do Good, Make Money, Have Fun.",
+            "Power through unity.",
+            "Altruism above all."
+          ],
+          "correctIndex": 1
+        },
+        {
+          "text": "According to the Foundation, what is the highest metric of value creation?",
+          "options": [
+            "Wealth",
+            "Happiness",
+            "Power",
+            "Charity"
+          ],
+          "correctIndex": 0
+        }
+      ]
+    },
+    {
+      "topicName": "Policy Engineering",
+      "questions": [
+        {
+          "text": "What is 'Structural Incentive Engineering'?",
+          "options": [
+            "Constructing physical offices for maximum airflow.",
+            "Designing laws where profitable action is beneficial for society.",
+            "A taxation model for the ultra-wealthy.",
+            "Automating jobs via AI."
+          ],
+          "correctIndex": 1
+        }
+      ]
+    }
+  ]
+}

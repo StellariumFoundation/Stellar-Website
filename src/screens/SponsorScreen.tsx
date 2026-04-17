@@ -3,7 +3,7 @@ import { BottomSheet } from '../components/BottomSheet';
 import { BANK_DETAILS } from '../data';
 import { Landmark, Bitcoin, DollarSign, CreditCard, Copy } from 'lucide-react';
 
-export function SponsorScreen() {
+export function SponsorScreen({ onContact }: { onContact?: () => void }) {
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
 
   const handleCopy = (text: string) => {
@@ -15,11 +15,11 @@ export function SponsorScreen() {
     switch (selectedMethod) {
       case 'bank':
         return (
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center w-full">
             <h2 className="text-2xl font-bold text-white mb-6 text-center">Bank Transfer</h2>
             <div className="w-full space-y-4">
               {BANK_DETAILS.map(bank => (
-                <div key={bank.id} className="bg-white/5 border border-white/10 rounded-xl p-4">
+                <div key={bank.id} className="bg-white/5 border border-white/10 rounded-xl p-4 w-full">
                   <h3 className="text-[var(--color-primary)] font-bold mb-1">{bank.title}</h3>
                   <p className="text-[var(--color-secondary)] text-sm mb-4">{bank.bankName}</p>
                   <div className="flex items-start justify-between bg-[var(--color-surface)] p-3 rounded-lg overflow-x-auto">
@@ -35,7 +35,7 @@ export function SponsorScreen() {
         );
       case 'crypto':
         return (
-           <div className="flex flex-col items-center">
+           <div className="flex flex-col items-center w-full">
             <h2 className="text-2xl font-bold text-white mb-6 text-center">Cryptocurrency</h2>
             <div className="w-full bg-white/5 border border-white/10 rounded-xl p-4 mb-6">
               <h3 className="text-[var(--color-secondary)] font-bold mb-4">Monero (XMR)</h3>
@@ -61,7 +61,7 @@ export function SponsorScreen() {
         );
       case 'patreon':
         return (
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center w-full">
              <h2 className="text-2xl font-bold text-[var(--color-primary)] mb-4 text-center">Patreon</h2>
              <p className="text-[var(--color-on-surface)] text-center mb-8">Join our exclusive community on Patreon.</p>
              <a  href="https://www.patreon.com/join/StellariumFoundation" target="_blank" rel="noopener noreferrer" className="w-full max-w-xs py-4 text-center bg-white text-black rounded-full font-bold uppercase tracking-wider">
@@ -71,7 +71,7 @@ export function SponsorScreen() {
         );
       case 'paypal':
         return (
-           <div className="flex flex-col items-center">
+           <div className="flex flex-col items-center w-full">
              <h2 className="text-2xl font-bold text-white mb-6 text-center">PayPal</h2>
              <div className="flex w-full items-center justify-between bg-[var(--color-surface)] p-4 rounded-xl border border-white/10 mb-8">
                 <span className="text-[var(--color-on-background)] font-mono text-sm">stellar.foundation.us@gmail.com</span>
@@ -98,7 +98,7 @@ export function SponsorScreen() {
            <p className="text-sm text-[var(--color-on-surface)] mt-2 text-center leading-relaxed">
             Gain a platform of global cultural relevance to advertise your brand. Support the Stellarium Foundation and align your business with prosperity and peace.
            </p>
-           <button className="mt-6 px-6 py-2 bg-[var(--color-tertiary)] text-black font-bold uppercase tracking-wider text-xs rounded-full">
+           <button onClick={onContact} className="mt-6 px-6 py-2 bg-[var(--color-tertiary)] text-black font-bold uppercase tracking-wider text-xs rounded-full hover:opacity-90 active:scale-95 transition-all">
              Contact for a Deal
            </button>
         </div>

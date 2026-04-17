@@ -17,7 +17,7 @@ export function BottomSheet({ isOpen, onClose, children }: BottomSheetProps) {
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }} 
             exit={{ opacity: 0 }} 
-            className="fixed inset-0 bg-black/60 z-40 backdrop-blur-sm" 
+            className="fixed inset-0 bg-black/60 z-[100] backdrop-blur-sm" 
             onClick={onClose} 
           />
           <motion.div 
@@ -25,14 +25,14 @@ export function BottomSheet({ isOpen, onClose, children }: BottomSheetProps) {
             animate={{ y: 0 }} 
             exit={{ y: "100%" }} 
             transition={{ type: "spring", bounce: 0, duration: 0.4 }} 
-            className="fixed bottom-0 left-0 right-0 bg-black/90 text-white z-50 rounded-t-3xl max-h-[90vh] overflow-y-auto safe-bottom backdrop-blur-xl border-t border-white/10"
+            className="fixed bottom-0 left-0 right-0 bg-black/90 text-white z-[100] rounded-t-3xl max-h-[90vh] overflow-y-auto safe-bottom backdrop-blur-xl border-t border-white/10"
           >
-            <div className="sticky top-0 right-0 p-4 flex justify-end bg-gradient-to-b from-black/90 to-transparent">
+            <div className="sticky top-0 right-0 p-4 flex justify-end bg-gradient-to-b from-black/90 to-transparent z-10">
               <button onClick={onClose} className="p-2 bg-white/10 rounded-full hover:bg-white/20 transition-colors">
                 <X size={20} />
               </button>
             </div>
-            <div className="px-6 pb-8">
+            <div className="px-6 pb-24 w-full flex flex-col">
               {children}
             </div>
           </motion.div>

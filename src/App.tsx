@@ -12,7 +12,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<Tab>('home');
 
   return (
-    <div className="flex flex-col h-screen w-full bg-transparent">
+    <div className="flex flex-col h-[100dvh] w-full bg-transparent">
       {/* Main Content Area */}
       <div className="flex-1 overflow-hidden relative">
         {activeTab === 'home' && <HomeScreen />}

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { HOME_TOPICS } from '../data';
 import { BottomSheet } from '../components/BottomSheet';
+import { FileText } from 'lucide-react';
 
 export function HomeScreen() {
   const [selectedTopic, setSelectedTopic] = useState<typeof HOME_TOPICS[0] | null>(null);
@@ -11,14 +12,22 @@ export function HomeScreen() {
         Stellarium Foundation
       </h1>
       
-      <div className="mt-4">
+      <div className="mt-4 flex flex-col sm:flex-row gap-3 items-center">
         <a 
-          href="https://www.stellarium.ddns-ip.net/home" 
+          href="https://stellariumfoundation.github.io/Stellarium-App/" 
           target="_blank" 
           rel="noopener noreferrer"
-          className="px-4 py-2 border border-white/30 text-white rounded-md text-xs font-medium uppercase tracking-widest hover:bg-[var(--color-surface)] transition-colors"
+          className="px-4 py-2 border border-[var(--color-tertiary)] bg-[var(--color-tertiary)]/10 text-[var(--color-tertiary)] rounded-md text-xs font-bold uppercase tracking-widest hover:bg-[var(--color-tertiary)]/20 transition-colors w-full sm:w-auto text-center flex items-center justify-center gap-2"
         >
-          Visit Official Website
+          Download Mobile App
+        </a>
+        <a 
+          href="/resume.pdf" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="px-4 py-2 border border-white/30 text-white rounded-md text-xs font-medium uppercase tracking-widest hover:bg-[var(--color-surface)] transition-colors w-full sm:w-auto text-center flex items-center justify-center gap-2"
+        >
+          <FileText size={16} /> John Victor's Resume
         </a>
       </div>
 

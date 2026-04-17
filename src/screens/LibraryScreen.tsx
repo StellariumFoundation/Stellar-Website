@@ -167,12 +167,11 @@ export function LibraryScreen() {
                     <a href="/The.Stellarium.Book.pdf" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 px-4 py-2 bg-[var(--color-tertiary)]/20 text-[var(--color-tertiary)] rounded-full text-sm font-medium hover:bg-[var(--color-tertiary)]/30 transition-colors w-24">
                       <ExternalLink size={16} /> Open
                     </a>
-                    <a href="/The.Stellarium.Book.pdf" download className="flex items-center justify-center gap-2 px-4 py-2 border border-white/20 text-gray-200 rounded-full text-sm font-medium hover:bg-white/5 transition-colors w-24">
+                    <a href="/The.Stellarium.Book.pdf" download="The.Stellarium.Book.pdf" className="flex items-center justify-center gap-2 px-4 py-2 border border-white/20 text-gray-200 rounded-full text-sm font-medium hover:bg-white/5 transition-colors w-24">
                       <Download size={16} /> Save
                     </a>
                  </div>
-                 <div className="flex gap-4 sm:gap-6 w-full justify-between sm:justify-center border-t border-white/10 pt-4">
-                    <a href="https://www.amazon.com/dp/B0FLPSQ6ZS" target="_blank" rel="noopener noreferrer" className="text-xs text-[var(--color-tertiary)] uppercase font-semibold hover:text-[var(--color-primary)] transition-colors">Buy on Amazon</a>
+                 <div className="flex gap-4 sm:gap-6 w-full justify-center border-t border-white/10 pt-4">
                     <a href="https://www.everand.com/book/897831454/The-Stellarium-Book" target="_blank" rel="noopener noreferrer" className="text-xs text-[var(--color-tertiary)] uppercase font-semibold hover:text-[var(--color-primary)] transition-colors">Read on Everand</a>
                  </div>
               </div>
@@ -184,7 +183,7 @@ export function LibraryScreen() {
                     <a href="/Stellarium.Society.pdf" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 px-4 py-2 bg-[var(--color-tertiary)]/20 text-[var(--color-tertiary)] rounded-full text-sm font-medium hover:bg-[var(--color-tertiary)]/30 transition-colors w-24">
                       <ExternalLink size={16} /> Open
                     </a>
-                    <a href="/Stellarium.Society.pdf" download className="flex items-center justify-center gap-2 px-4 py-2 border border-white/20 text-gray-200 rounded-full text-sm font-medium hover:bg-white/5 transition-colors w-24">
+                    <a href="/Stellarium.Society.pdf" download="Stellarium.Society.pdf" className="flex items-center justify-center gap-2 px-4 py-2 border border-white/20 text-gray-200 rounded-full text-sm font-medium hover:bg-white/5 transition-colors w-24">
                       <Download size={16} /> Save
                     </a>
                  </div>

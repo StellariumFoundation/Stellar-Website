@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Home, Book, FileQuestion, CircleDollarSign, Mail } from 'lucide-react';
 import { HomeScreen } from './screens/HomeScreen';
 import { LibraryScreen } from './screens/LibraryScreen';
@@ -10,6 +10,13 @@ type Tab = 'home' | 'books' | 'quiz' | 'sponsor' | 'contact';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<Tab>('home');
+
+  // Enforce root path: if someone navigates to /support-us, change the URL to /
+  useEffect(() => {
+    if (window.location.pathname !== '/' && window.location.pathname !== '/index.html') {
+      window.history.replaceState(null, '', '/');
+    }
+  }, []);
 
   return (
     <div className="flex flex-col h-[100dvh] w-full bg-transparent">

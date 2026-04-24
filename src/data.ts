@@ -81,6 +81,36 @@ export const BANK_DETAILS = [
     title: "British Pound (GBP)",
     bankName: "Revolut Technologies Singapore Pte. Ltd",
     details: "Beneficiary: Eliabe Matos Da Silva\nAccount: 6120621849\nBIC/SWIFT: REVOSGS2\nAddress: 6 Battery Road, Floor 6-01, 049909, Singapore, Singapore"
+  },
+  {
+    id: "hkd",
+    title: "Hong Kong Dollar (HKD)",
+    bankName: "Revolut Technologies Singapore Pte. Ltd",
+    details: "Beneficiary: Eliabe Matos Da Silva\nAccount: 6120621849\nBIC/SWIFT: REVOSGS2\nAddress: 6 Battery Road, Floor 6-01, 049909, Singapore, Singapore"
+  },
+  {
+    id: "aed",
+    title: "UAE Dirham (AED)",
+    bankName: "Revolut Technologies Singapore Pte. Ltd",
+    details: "Beneficiary: Eliabe Matos Da Silva\nAccount: 6120621849\nBIC/SWIFT: REVOSGS2\nAddress: 6 Battery Road, Floor 6-01, 049909, Singapore, Singapore"
+  },
+  {
+    id: "ils",
+    title: "Israeli New Shekel (ILS)",
+    bankName: "Revolut Technologies Singapore Pte. Ltd",
+    details: "Beneficiary: Eliabe Matos Da Silva\nAccount: 6120621849\nBIC/SWIFT: REVOSGS2\nAddress: 6 Battery Road, Floor 6-01, 049909, Singapore, Singapore"
+  },
+  {
+    id: "jpy",
+    title: "Japanese Yen (JPY)",
+    bankName: "Revolut Technologies Singapore Pte. Ltd",
+    details: "Beneficiary: Eliabe Matos Da Silva\nAccount: 6120621849\nBIC/SWIFT: REVOSGS2\nAddress: 6 Battery Road, Floor 6-01, 049909, Singapore, Singapore"
+  },
+  {
+    id: "pln",
+    title: "Polish Zloty (PLN)",
+    bankName: "Revolut Technologies Singapore Pte. Ltd",
+    details: "Beneficiary: Eliabe Matos Da Silva\nAccount: 6120621849\nBIC/SWIFT: REVOSGS2\nAddress: 6 Battery Road, Floor 6-01, 049909, Singapore, Singapore"
   }
 ];
 

@@ -16,7 +16,19 @@ export function SponsorScreen({ onContact }: { onContact?: () => void }) {
       case 'bank':
         return (
           <div className="flex flex-col items-center w-full">
-            <h2 className="text-2xl font-bold text-white mb-6 text-center">Bank Transfer</h2>
+            <h2 className="text-2xl font-bold text-white mb-2 text-center">Bank Transfer</h2>
+            <p className="text-sm text-[var(--color-on-surface)] text-center mb-4">
+              Please choose the account matching your currency.
+            </p>
+            <a 
+              href="https://www.notion.so/Stellarium-Literature-19fc1c04bbc1801f9243d1fa5d7d44ad?pvs=21" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="px-4 py-2 bg-[var(--color-surface)] border border-white/10 rounded-full text-xs text-[var(--color-tertiary)] font-bold uppercase tracking-wider mb-6 hover:bg-white/5 transition-colors"
+            >
+              View Stellarium Literature Docs
+            </a>
+            
             <div className="w-full space-y-4">
               {BANK_DETAILS.map(bank => (
                 <div key={bank.id} className="bg-white/5 border border-white/10 rounded-xl p-4 w-full">
@@ -24,7 +36,10 @@ export function SponsorScreen({ onContact }: { onContact?: () => void }) {
                   <p className="text-[var(--color-secondary)] text-sm mb-4">{bank.bankName}</p>
                   <div className="flex items-start justify-between bg-[var(--color-surface)] p-3 rounded-lg overflow-x-auto">
                      <pre className="text-xs text-[var(--color-on-background)] font-mono flex-1 whitespace-pre-wrap leading-relaxed">{bank.details}</pre>
-                     <button onClick={() => handleCopy(bank.details)} className="ml-4 p-2 text-gray-500 hover:text-[var(--color-tertiary)]">
+                     <button 
+                       onClick={() => handleCopy(`${bank.bankName}\n${bank.details}`)} 
+                       className="ml-4 p-2 text-gray-500 hover:text-[var(--color-tertiary)]"
+                     >
                        <Copy size={16} />
                      </button>
                   </div>

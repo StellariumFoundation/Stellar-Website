@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { HOME_TOPICS } from '../data';
 import { BottomSheet } from '../components/BottomSheet';
-import { FileText, Download, Eye, ArrowLeft, Facebook, Instagram, Twitter, Send, MessageCircle, Copy } from 'lucide-react';
+import { FileText, Download, Eye, ArrowLeft, Facebook, Instagram, Twitter, Send, MessageCircle, Copy, Youtube } from 'lucide-react';
 import Markdown from 'react-markdown';
 import { RESUME_MARKDOWN } from '../data/resume';
 
@@ -159,6 +159,16 @@ export function HomeScreen() {
           <a href="https://t.me/StellariumActions" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-[var(--color-surface)] border border-white/5 rounded-xl hover:bg-white/5 transition-colors group">
             <Send size={20} className="text-[#0088cc] group-hover:scale-110 transition-transform flex-shrink-0" />
             <span className="text-xs font-medium text-white truncate">Stellarium (Telegram)</span>
+          </a>
+
+          <a href="https://youtube.com/@johnvictorwomen?si=CoeYDeowTy0gIQMi" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-[var(--color-surface)] border border-white/5 rounded-xl hover:bg-white/5 transition-colors group">
+            <Youtube size={20} className="text-[#FF0000] group-hover:scale-110 transition-transform flex-shrink-0" />
+            <span className="text-xs font-medium text-white truncate">John (YouTube)</span>
+          </a>
+
+          <a href="https://youtube.com/@stellariumfoundation?si=fZP8YYH6VrgGrZKV" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-[var(--color-surface)] border border-white/5 rounded-xl hover:bg-white/5 transition-colors group">
+            <Youtube size={20} className="text-[#FF0000] group-hover:scale-110 transition-transform flex-shrink-0" />
+            <span className="text-xs font-medium text-white truncate">Stellarium (YouTube)</span>
           </a>
 
           <a href="https://vk.ru/id1113302487" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-[var(--color-surface)] border border-white/5 rounded-xl hover:bg-white/5 transition-colors group">

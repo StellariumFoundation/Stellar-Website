@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { HOME_TOPICS } from '../data';
 import { BottomSheet } from '../components/BottomSheet';
-import { FileText, Download, Eye, ArrowLeft, Facebook, Instagram, Twitter, Send } from 'lucide-react';
+import { FileText, Download, Eye, ArrowLeft, Facebook, Instagram, Twitter, Send, MessageCircle, Copy } from 'lucide-react';
 import Markdown from 'react-markdown';
 import { RESUME_MARKDOWN } from '../data/resume';
 
@@ -14,6 +14,13 @@ const TikTokIcon = ({ size = 24, className = "" }: { size?: number, className?: 
 export function HomeScreen() {
   const [selectedTopic, setSelectedTopic] = useState<typeof HOME_TOPICS[0] | null>(null);
   const [showResume, setShowResume] = useState(false);
+  const [wechatCopied, setWechatCopied] = useState(false);
+
+  const handleCopyWeChat = () => {
+    navigator.clipboard.writeText("john_victor_0");
+    setWechatCopied(true);
+    setTimeout(() => setWechatCopied(false), 2000);
+  };
 
   if (showResume) {
     return (
@@ -125,37 +132,51 @@ export function HomeScreen() {
         
         <div className="grid grid-cols-2 gap-3 w-full">
           <a href="https://www.facebook.com/share/1EcFgbNBXF/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-[var(--color-surface)] border border-white/5 rounded-xl hover:bg-white/5 transition-colors group">
-            <Facebook size={20} className="text-[#1877F2] group-hover:scale-110 transition-transform" />
-            <span className="text-xs font-medium text-white">Facebook</span>
+            <Facebook size={20} className="text-[#1877F2] group-hover:scale-110 transition-transform flex-shrink-0" />
+            <span className="text-xs font-medium text-white truncate">Facebook</span>
           </a>
           
           <a href="https://www.instagram.com/john.victor.the.one" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-[var(--color-surface)] border border-white/5 rounded-xl hover:bg-white/5 transition-colors group">
-            <Instagram size={20} className="text-[#E1306C] group-hover:scale-110 transition-transform" />
+            <Instagram size={20} className="text-[#E1306C] group-hover:scale-110 transition-transform flex-shrink-0" />
             <span className="text-xs font-medium text-white truncate">Instagram</span>
           </a>
 
           <a href="https://tiktok.com/@johnvictorone" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-[var(--color-surface)] border border-white/5 rounded-xl hover:bg-white/5 transition-colors group">
-            <TikTokIcon size={20} className="text-white group-hover:scale-110 transition-transform" />
+            <TikTokIcon size={20} className="text-white group-hover:scale-110 transition-transform flex-shrink-0" />
             <span className="text-xs font-medium text-white truncate">John (TikTok)</span>
           </a>
 
           <a href="https://tiktok.com/@stellarium.foundation" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-[var(--color-surface)] border border-white/5 rounded-xl hover:bg-white/5 transition-colors group">
-            <TikTokIcon size={20} className="text-white group-hover:scale-110 transition-transform" />
+            <TikTokIcon size={20} className="text-white group-hover:scale-110 transition-transform flex-shrink-0" />
             <span className="text-xs font-medium text-white truncate">Stellarium (TikTok)</span>
           </a>
 
           <a href="https://t.me/JohnVictorOne" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-[var(--color-surface)] border border-white/5 rounded-xl hover:bg-white/5 transition-colors group">
-            <Send size={20} className="text-[#0088cc] group-hover:scale-110 transition-transform" />
+            <Send size={20} className="text-[#0088cc] group-hover:scale-110 transition-transform flex-shrink-0" />
             <span className="text-xs font-medium text-white truncate">John (Telegram)</span>
           </a>
 
           <a href="https://t.me/StellariumActions" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-[var(--color-surface)] border border-white/5 rounded-xl hover:bg-white/5 transition-colors group">
-            <Send size={20} className="text-[#0088cc] group-hover:scale-110 transition-transform" />
+            <Send size={20} className="text-[#0088cc] group-hover:scale-110 transition-transform flex-shrink-0" />
             <span className="text-xs font-medium text-white truncate">Stellarium (Telegram)</span>
           </a>
 
+          <a href="https://vk.ru/id1113302487" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-[var(--color-surface)] border border-white/5 rounded-xl hover:bg-white/5 transition-colors group">
+            <div className="bg-[#0077FF] p-1 rounded-md group-hover:scale-110 transition-transform flex-shrink-0 w-5 h-5 flex items-center justify-center">
+              <span className="font-bold text-white text-[10px] leading-none">VK</span>
+            </div>
+            <span className="text-xs font-medium text-white truncate">VKontakte</span>
+          </a>
+
+          <button onClick={handleCopyWeChat} className="flex items-center gap-3 p-3 bg-[var(--color-surface)] border border-white/5 rounded-xl hover:bg-white/5 transition-colors group text-left">
+            <MessageCircle size={20} className="text-[#07C160] group-hover:scale-110 transition-transform flex-shrink-0" />
+            <span className="text-xs font-medium text-white truncate flex-1">
+              {wechatCopied ? <span className="text-[#07C160]">Copied!</span> : "WeChat"}
+            </span>
+          </button>
+
           <a href="https://x.com/StellarFou4749" target="_blank" rel="noopener noreferrer" className="col-span-2 flex items-center justify-center gap-3 p-3 bg-[var(--color-surface)] border border-white/5 rounded-xl hover:bg-white/5 transition-colors group">
-            <Twitter size={20} className="text-white group-hover:scale-110 transition-transform" />
+            <Twitter size={20} className="text-white group-hover:scale-110 transition-transform flex-shrink-0" />
             <span className="text-xs font-medium text-white">X (Twitter)</span>
           </a>
         </div>

@@ -92,14 +92,14 @@ export function HomeScreen() {
         How would you like to interact?
       </p>
 
-      <div className="grid grid-cols-3 gap-3 w-full max-w-md mt-6">
+      <div className="grid grid-cols-3 gap-3 w-full max-w-md mt-6 transform-gpu">
         {HOME_TOPICS.map(topic => {
           const Icon = topic.icon;
           return (
             <button
               key={topic.id}
               onClick={() => setSelectedTopic(topic)}
-              className="flex flex-col items-center justify-center p-4 h-24 bg-[var(--color-surface)] rounded-xl border border-white/5 shadow-md active:scale-95 transition-transform"
+              className="flex flex-col items-center justify-center p-4 h-24 bg-[var(--color-surface)] rounded-xl border border-white/5 shadow-md active:scale-95 transition-transform transform-gpu will-change-transform"
             >
               <Icon size={28} className="text-[var(--color-secondary)] mb-2" />
               <span className="text-[10px] font-bold text-[var(--color-on-surface)] uppercase tracking-wide">{topic.title}</span>
@@ -130,63 +130,63 @@ export function HomeScreen() {
       <div className="mt-10 mb-24 w-full max-w-md flex flex-col items-center border-t border-white/10 pt-8">
         <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-on-surface)] mb-6">Connect With Us</h3>
         
-        <div className="grid grid-cols-2 gap-3 w-full">
-          <a href="https://www.facebook.com/share/1EcFgbNBXF/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-[var(--color-surface)] border border-white/5 rounded-xl hover:bg-white/5 transition-colors group">
-            <Facebook size={20} className="text-[#1877F2] group-hover:scale-110 transition-transform flex-shrink-0" />
+        <div className="grid grid-cols-2 gap-3 w-full transform-gpu">
+          <a href="https://www.facebook.com/share/1EcFgbNBXF/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-[var(--color-surface)] border border-white/5 rounded-xl hover:bg-white/5 transition-colors group transform-gpu">
+            <Facebook size={20} className="text-[#1877F2] group-hover:scale-110 transition-transform flex-shrink-0 will-change-transform" />
             <span className="text-xs font-medium text-white truncate">Facebook</span>
           </a>
           
-          <a href="https://www.instagram.com/john.victor.the.one" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-[var(--color-surface)] border border-white/5 rounded-xl hover:bg-white/5 transition-colors group">
-            <Instagram size={20} className="text-[#E1306C] group-hover:scale-110 transition-transform flex-shrink-0" />
+          <a href="https://www.instagram.com/john.victor.the.one" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-[var(--color-surface)] border border-white/5 rounded-xl hover:bg-white/5 transition-colors group transform-gpu">
+            <Instagram size={20} className="text-[#E1306C] group-hover:scale-110 transition-transform flex-shrink-0 will-change-transform" />
             <span className="text-xs font-medium text-white truncate">Instagram</span>
           </a>
 
-          <a href="https://tiktok.com/@johnvictorone" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-[var(--color-surface)] border border-white/5 rounded-xl hover:bg-white/5 transition-colors group">
-            <TikTokIcon size={20} className="text-white group-hover:scale-110 transition-transform flex-shrink-0" />
+          <a href="https://tiktok.com/@johnvictorone" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-[var(--color-surface)] border border-white/5 rounded-xl hover:bg-white/5 transition-colors group transform-gpu">
+            <TikTokIcon size={20} className="text-white group-hover:scale-110 transition-transform flex-shrink-0 will-change-transform" />
             <span className="text-xs font-medium text-white truncate">John (TikTok)</span>
           </a>
 
-          <a href="https://tiktok.com/@stellarium.foundation" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-[var(--color-surface)] border border-white/5 rounded-xl hover:bg-white/5 transition-colors group">
-            <TikTokIcon size={20} className="text-white group-hover:scale-110 transition-transform flex-shrink-0" />
+          <a href="https://tiktok.com/@stellarium.foundation" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-[var(--color-surface)] border border-white/5 rounded-xl hover:bg-white/5 transition-colors group transform-gpu">
+            <TikTokIcon size={20} className="text-white group-hover:scale-110 transition-transform flex-shrink-0 will-change-transform" />
             <span className="text-xs font-medium text-white truncate">Stellarium (TikTok)</span>
           </a>
 
-          <a href="https://t.me/JohnVictorOne" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-[var(--color-surface)] border border-white/5 rounded-xl hover:bg-white/5 transition-colors group">
-            <Send size={20} className="text-[#0088cc] group-hover:scale-110 transition-transform flex-shrink-0" />
+          <a href="https://t.me/JohnVictorOne" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-[var(--color-surface)] border border-white/5 rounded-xl hover:bg-white/5 transition-colors group transform-gpu">
+            <Send size={20} className="text-[#0088cc] group-hover:scale-110 transition-transform flex-shrink-0 will-change-transform" />
             <span className="text-xs font-medium text-white truncate">John (Telegram)</span>
           </a>
 
-          <a href="https://t.me/StellariumActions" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-[var(--color-surface)] border border-white/5 rounded-xl hover:bg-white/5 transition-colors group">
-            <Send size={20} className="text-[#0088cc] group-hover:scale-110 transition-transform flex-shrink-0" />
+          <a href="https://t.me/StellariumActions" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-[var(--color-surface)] border border-white/5 rounded-xl hover:bg-white/5 transition-colors group transform-gpu">
+            <Send size={20} className="text-[#0088cc] group-hover:scale-110 transition-transform flex-shrink-0 will-change-transform" />
             <span className="text-xs font-medium text-white truncate">Stellarium (Telegram)</span>
           </a>
 
-          <a href="https://youtube.com/@johnvictorwomen?si=CoeYDeowTy0gIQMi" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-[var(--color-surface)] border border-white/5 rounded-xl hover:bg-white/5 transition-colors group">
-            <Youtube size={20} className="text-[#FF0000] group-hover:scale-110 transition-transform flex-shrink-0" />
+          <a href="https://youtube.com/@johnvictorwomen?si=CoeYDeowTy0gIQMi" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-[var(--color-surface)] border border-white/5 rounded-xl hover:bg-white/5 transition-colors group transform-gpu">
+            <Youtube size={20} className="text-[#FF0000] group-hover:scale-110 transition-transform flex-shrink-0 will-change-transform" />
             <span className="text-xs font-medium text-white truncate">John (YouTube)</span>
           </a>
 
-          <a href="https://youtube.com/@stellariumfoundation?si=fZP8YYH6VrgGrZKV" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-[var(--color-surface)] border border-white/5 rounded-xl hover:bg-white/5 transition-colors group">
-            <Youtube size={20} className="text-[#FF0000] group-hover:scale-110 transition-transform flex-shrink-0" />
+          <a href="https://youtube.com/@stellariumfoundation?si=fZP8YYH6VrgGrZKV" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-[var(--color-surface)] border border-white/5 rounded-xl hover:bg-white/5 transition-colors group transform-gpu">
+            <Youtube size={20} className="text-[#FF0000] group-hover:scale-110 transition-transform flex-shrink-0 will-change-transform" />
             <span className="text-xs font-medium text-white truncate">Stellarium (YouTube)</span>
           </a>
 
-          <a href="https://vk.ru/id1113302487" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-[var(--color-surface)] border border-white/5 rounded-xl hover:bg-white/5 transition-colors group">
-            <div className="bg-[#0077FF] p-1 rounded-md group-hover:scale-110 transition-transform flex-shrink-0 w-5 h-5 flex items-center justify-center">
+          <a href="https://vk.ru/id1113302487" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-[var(--color-surface)] border border-white/5 rounded-xl hover:bg-white/5 transition-colors group transform-gpu">
+            <div className="bg-[#0077FF] p-1 rounded-md group-hover:scale-110 transition-transform flex-shrink-0 w-5 h-5 flex items-center justify-center will-change-transform">
               <span className="font-bold text-white text-[10px] leading-none">VK</span>
             </div>
             <span className="text-xs font-medium text-white truncate">VKontakte</span>
           </a>
 
-          <button onClick={handleCopyWeChat} className="flex items-center gap-3 p-3 bg-[var(--color-surface)] border border-white/5 rounded-xl hover:bg-white/5 transition-colors group text-left">
-            <MessageCircle size={20} className="text-[#07C160] group-hover:scale-110 transition-transform flex-shrink-0" />
+          <button onClick={handleCopyWeChat} className="flex items-center gap-3 p-3 bg-[var(--color-surface)] border border-white/5 rounded-xl hover:bg-white/5 transition-colors group text-left transform-gpu">
+            <MessageCircle size={20} className="text-[#07C160] group-hover:scale-110 transition-transform flex-shrink-0 will-change-transform" />
             <span className="text-xs font-medium text-white truncate flex-1">
               {wechatCopied ? <span className="text-[#07C160]">Copied!</span> : "WeChat"}
             </span>
           </button>
 
-          <a href="https://x.com/StellarFou4749" target="_blank" rel="noopener noreferrer" className="col-span-2 flex items-center justify-center gap-3 p-3 bg-[var(--color-surface)] border border-white/5 rounded-xl hover:bg-white/5 transition-colors group">
-            <Twitter size={20} className="text-white group-hover:scale-110 transition-transform flex-shrink-0" />
+          <a href="https://x.com/StellarFou4749" target="_blank" rel="noopener noreferrer" className="col-span-2 flex items-center justify-center gap-3 p-3 bg-[var(--color-surface)] border border-white/5 rounded-xl hover:bg-white/5 transition-colors group transform-gpu">
+            <Twitter size={20} className="text-white group-hover:scale-110 transition-transform flex-shrink-0 will-change-transform" />
             <span className="text-xs font-medium text-white">X (Twitter)</span>
           </a>
         </div>

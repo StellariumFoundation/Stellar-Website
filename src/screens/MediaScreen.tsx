@@ -1,175 +1,122 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
-  Play, 
-  Pause, 
-  Volume2, 
-  VolumeX, 
-  Maximize, 
-  Minimize, 
-  Search, 
-  Tv, 
   Clapperboard, 
-  Flame, 
   Eye, 
   Calendar, 
   Sparkles,
-  ChevronRight,
-  MonitorPlay,
-  Share2
+  Share2,
+  Plus,
+  Tv,
+  ExternalLink,
+  Youtube
 } from 'lucide-react';
 import { STELLARIUM_VIDEOS, StellariumVideo } from '../media/videos';
 
 export function MediaScreen() {
-  const [selectedVideo, setSelectedVideo] = useState<StellariumVideo>(STELLARIUM_VIDEOS[0]);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [volume, setVolume] = useState(0.8);
-  const [isMuted, setIsMuted] = useState(false);
-  const [isFullscreen, setIsFullscreen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('All');
+  const [videoList, setVideoList] = useState<StellariumVideo[]>(STELLARIUM_VIDEOS);
+  const [customUrl, setCustomUrl] = useState('');
+  const [customError, setCustomError] = useState('');
   const [showShareNotification, setShowShareNotification] = useState(false);
+  const [copiedTitle, setCopiedTitle] = useState('');
 
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const playerContainerRef = useRef<HTMLDivElement>(null);
-
-  // Sync state with active video change
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.load();
-      setIsPlaying(false);
-      setCurrentTime(0);
-    }
-  }, [selectedVideo]);
-
-  // Handle Play / Pause
-  const togglePlay = () => {
-    if (!videoRef.current) return;
-    if (isPlaying) {
-      videoRef.current.pause();
-      setIsPlaying(false);
-    } else {
-      videoRef.current.play()
-        .then(() => setIsPlaying(true))
-        .catch(err => console.log("Playback interrupted: ", err));
-    }
+  // Helper function to extract YouTube ID from standard URL strings
+  const getYouTubeId = (url: string): string | null => {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
   };
 
-  // Keyboard navigation / shortcut listener
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (document.activeElement?.tagName === 'INPUT' || document.activeElement?.tagName === 'TEXTAREA') {
-        return;
-      }
-      if (e.code === 'Space') {
-        e.preventDefault();
-        togglePlay();
-      }
+  // Add custom URL stream handler 
+  const handleAddCustomVideo = (e: React.FormEvent) => {
+    e.preventDefault();
+    setCustomError('');
+
+    if (!customUrl.trim()) return;
+
+    const videoId = getYouTubeId(customUrl);
+    if (!videoId) {
+      setCustomError('Please enter a valid YouTube Watch URL (e.g., https://youtube.com/watch?v=...)');
+      return;
+    }
+
+    const newVideo: StellariumVideo = {
+      id: `custom-${Date.now()}`,
+      title: `Custom Live Stream: ${videoId}`,
+      description: `Loaded dynamically from provided YouTube content watch link: ${customUrl}`,
+      url: `https://www.youtube.com/embed/${videoId}`,
+      youtubeUrl: customUrl,
+      duration: "Dynamic",
+      thumbnail: "📺",
+      category: "Vision",
+      views: "Live Stream Feed",
+      date: "Just Now"
     };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isPlaying]);
 
-  // Update Time
-  const handleTimeUpdate = () => {
-    if (!videoRef.current) return;
-    setCurrentTime(videoRef.current.currentTime);
+    setVideoList([newVideo, ...videoList]);
+    setCustomUrl('');
   };
-
-  // Set Metadata (Duration)
-  const handleLoadedMetadata = () => {
-    if (!videoRef.current) return;
-    setDuration(videoRef.current.duration);
-  };
-
-  // Handle Video Progress Bar seeking
-  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!videoRef.current) return;
-    const time = parseFloat(e.target.value);
-    videoRef.current.currentTime = time;
-    setCurrentTime(time);
-  };
-
-  // Handle Volume
-  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = parseFloat(e.target.value);
-    setVolume(val);
-    if (videoRef.current) {
-      videoRef.current.volume = val;
-      videoRef.current.muted = val === 0;
-    }
-    setIsMuted(val === 0);
-  };
-
-  // Toggle Mute
-  const toggleMute = () => {
-    if (!videoRef.current) return;
-    const nextMuted = !isMuted;
-    setIsMuted(nextMuted);
-    videoRef.current.muted = nextMuted;
-    if (nextMuted) {
-      videoRef.current.volume = 0;
-    } else {
-      videoRef.current.volume = volume;
-    }
-  };
-
-  // Toggle Fullscreen
-  const toggleFullscreen = () => {
-    if (!playerContainerRef.current) return;
-
-    if (!document.fullscreenElement) {
-      playerContainerRef.current.requestFullscreen()
-        .then(() => setIsFullscreen(true))
-        .catch(err => console.error("Could not request fullscreen: ", err));
-    } else {
-      document.exitFullscreen()
-        .then(() => setIsFullscreen(false))
-        .catch(err => console.error("Could not exit fullscreen: ", err));
-    }
-  };
-
-  // Listen for fullscreen change events (e.g. Esc key pressed)
-  useEffect(() => {
-    const handleFSChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
-    };
-    document.addEventListener('fullscreenchange', handleFSChange);
-    return () => document.removeEventListener('fullscreenchange', handleFSChange);
-  }, []);
-
-  // Format Time Helper (mm:ss)
-  const formatTime = (timeInSecs: number) => {
-    if (isNaN(timeInSecs)) return '0:00';
-    const mins = Math.floor(timeInSecs / 60);
-    const secs = Math.floor(timeInSecs % 60);
-    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-  };
-
-  // Filter videos
-  const categories = ['All', 'Vision', 'Engineering', 'Culture', 'Masterclass'];
-  const filteredVideos = STELLARIUM_VIDEOS.filter(video => {
-    const matchesCategory = selectedCategory === 'All' || video.category === selectedCategory;
-    const matchesSearch = video.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          video.description.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
 
   // Action: Copy Share Link
-  const handleShare = () => {
-    const shareText = `Watch "${selectedVideo.title}" on Stellarium. ${window.location.href}`;
-    navigator.clipboard.writeText(shareText)
-      .then(() => {
+  const handleShare = (video: StellariumVideo) => {
+    const shareText = `Watch "${video.title}" on YouTube: ${video.youtubeUrl}`;
+    
+    // Fallback for iframe sandboxes where navigator.clipboard is blocked
+    const fallbackCopy = (text: string): boolean => {
+      try {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.top = '0';
+        textarea.style.left = '0';
+        textarea.style.opacity = '0';
+        textarea.style.pointerEvents = 'none';
+        document.body.appendChild(textarea);
+        textarea.select();
+        textarea.setSelectionRange(0, 99999); // Mobile compatibility
+        const successful = document.execCommand('copy');
+        document.body.removeChild(textarea);
+        return successful;
+      } catch (err) {
+        console.error('Copy fallback execution failed', err);
+        return false;
+      }
+    };
+
+    const showSuccessToast = () => {
+      setCopiedTitle(video.title);
+      setShowShareNotification(true);
+      setTimeout(() => setShowShareNotification(false), 3000);
+    };
+
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(shareText)
+        .then(() => {
+          showSuccessToast();
+        })
+        .catch(() => {
+          if (fallbackCopy(shareText)) {
+            showSuccessToast();
+          } else {
+            // Fallback: update state to let user know they can copy manually
+            setCopiedTitle(`Ctrl+C to copy: ${video.youtubeUrl}`);
+            setShowShareNotification(true);
+            setTimeout(() => setShowShareNotification(false), 5000);
+          }
+        });
+    } else {
+      if (fallbackCopy(shareText)) {
+        showSuccessToast();
+      } else {
+        setCopiedTitle(`Copy link: ${video.youtubeUrl}`);
         setShowShareNotification(true);
-        setTimeout(() => setShowShareNotification(false), 2500);
-      })
-      .catch(err => console.error("Copy failed: ", err));
+        setTimeout(() => setShowShareNotification(false), 5000);
+      }
+    }
   };
 
   return (
     <div id="media-screen-root" className="flex flex-col h-full overflow-y-auto w-full p-4 md:p-6 lg:p-8 items-center bg-transparent">
-      {/* Page Title & Sparkles */}
+      {/* Page Title & Header */}
       <div className="mb-4 flex flex-col items-center">
         <div className="bg-[var(--color-tertiary)]/10 text-[var(--color-tertiary)] border border-[var(--color-tertiary)]/20 p-2.5 rounded-full mb-3 shrink-0 animate-pulse">
           <Clapperboard size={28} />
@@ -178,295 +125,163 @@ export function MediaScreen() {
           Stellarium Portal
         </h1>
         <p className="text-center text-xs text-gray-400 mt-2 max-w-sm tracking-wide">
-          Streaming high-velocity wisdom, engineering briefs, and cultural blueprints directly to your consciousness.
+          Streaming high-velocity wisdom, engineering briefs, and cultural blueprints directly from the YouTube channel.
         </p>
       </div>
 
       <div className="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-12 gap-6 mt-4 pb-28">
         
-        {/* LEFT PANEL: PLAYER & METADATA (8cols on lg) */}
-        <div className="lg:col-span-8 space-y-4">
+        {/* LEFT PANEL: VERTICAL STREAMING FEED OF IN-APP EMBEDDED VIDEOS WITH DETAILS */}
+        <div className="lg:col-span-8 space-y-6">
           
-          {/* Custom Video Player Container */}
-          <div 
-            ref={playerContainerRef}
-            id="video-player-container"
-            className="relative group bg-black/95 rounded-2xl overflow-hidden border border-white/10 shadow-2xl aspect-video transform-gpu transition-all"
-          >
-            {selectedVideo.isYouTube ? (
-              <iframe
-                src={`${selectedVideo.url}?autoplay=0&rel=0`}
-                title={selectedVideo.title}
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="w-full h-full object-cover rounded-2xl"
-              />
-            ) : (
-              <>
-                <video
-                  ref={videoRef}
-                  src={selectedVideo.url}
-                  onClick={togglePlay}
-                  onTimeUpdate={handleTimeUpdate}
-                  onLoadedMetadata={handleLoadedMetadata}
-                  onEnded={() => {
-                    setIsPlaying(false);
-                    // Auto-advance to next video if matches category
-                    const currentIndex = filteredVideos.findIndex(v => v.id === selectedVideo.id);
-                    if (currentIndex !== -1 && currentIndex < filteredVideos.length - 1) {
-                      setSelectedVideo(filteredVideos[currentIndex + 1]);
-                    }
-                  }}
-                  className="w-full h-full object-contain cursor-pointer"
-                  playsInline
+          {videoList.map((video) => (
+            <div 
+              key={video.id}
+              className="bg-[var(--color-surface)] border border-white/5 rounded-2xl overflow-hidden shadow-2xl transition-all duration-300 hover:border-white/10"
+            >
+              {/* Custom YouTube iframe player with absolute in-app embed mode constraint */}
+              <div className="relative bg-black rounded-t-2xl overflow-hidden border-b border-white/10 aspect-video transform-gpu">
+                <iframe
+                  src={`${video.url}?rel=0&modestbranding=1`}
+                  title={video.title}
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="w-full h-full object-cover"
                 />
+              </div>
 
-                {/* Giant Centered Play/Pause Button State Overlay */}
-                {!isPlaying && (
-                  <div 
-                    onClick={togglePlay}
-                    className="absolute inset-0 flex items-center justify-center bg-black/40 hover:bg-black/50 transition-all cursor-pointer z-10"
-                  >
-                    <div className="p-5 rounded-full bg-[var(--color-tertiary)] text-black shadow-lg scale-100 hover:scale-110 active:scale-95 transition-all">
-                      <Play size={30} fill="currentColor" />
-                    </div>
-                  </div>
-                )}
-
-                {/* CUSTOM PLAYER SKINBAR overlay - triggers on group hover or when paused */}
-                <div className={`absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent p-4 flex flex-col space-y-3 z-20 transition-opacity duration-300 ${isPlaying ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'}`}>
-                  
-                  {/* Progress Bar & Seek Slider */}
-                  <div className="flex items-center space-x-2">
-                    <input 
-                      type="range"
-                      min="0"
-                      max={duration || 100}
-                      value={currentTime}
-                      onChange={handleSeek}
-                      className="w-full h-1.5 rounded-lg appearance-none cursor-pointer bg-white/20 accent-[var(--color-tertiary)] hover:h-2 transition-all outline-none"
-                    />
+              {/* Video Info Metadata Details Card Body */}
+              <div className="p-5 space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+                  <div className="flex-1 min-w-0">
+                    <span className="inline-block bg-red-600/10 text-red-500 text-[10px] font-bold border border-red-500/20 px-3 py-1 rounded-full uppercase tracking-wider mb-2">
+                      {video.category} Video Spec
+                    </span>
+                    <h2 className="text-lg md:text-xl font-bold tracking-wide text-white leading-tight">
+                      {video.title}
+                    </h2>
                   </div>
 
-                  {/* Controls Grid */}
-                  <div className="flex items-center justify-between text-white text-xs">
-                    
-                    {/* Play, Volume, and Time Controls */}
-                    <div className="flex items-center space-x-4">
-                      <button 
-                        onClick={togglePlay} 
-                        className="p-1 hover:text-[var(--color-tertiary)] transition-colors"
-                        title={isPlaying ? "Pause (Space)" : "Play (Space)"}
-                      >
-                        {isPlaying ? <Pause size={18} fill="currentColor" /> : <Play size={18} fill="currentColor" />}
-                      </button>
-
-                      <div className="flex items-center space-x-1">
-                        <button 
-                          onClick={toggleMute} 
-                          className="p-1 hover:text-[var(--color-tertiary)] transition-colors"
-                          title={isMuted ? "Unmute" : "Mute"}
-                        >
-                          {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
-                        </button>
-                        <input 
-                          type="range"
-                          min="0"
-                          max="1"
-                          step="0.05"
-                          value={isMuted ? 0 : volume}
-                          onChange={handleVolumeChange}
-                          className="w-16 h-1 rounded bg-white/30 accent-[var(--color-tertiary)] outline-none cursor-pointer"
-                        />
-                      </div>
-
-                      {/* Time Stamp */}
-                      <span className="font-mono text-[10px] text-gray-300">
-                        {formatTime(currentTime)} / {formatTime(duration)}
-                      </span>
-                    </div>
-
-                    {/* Video Info Indicator & Actions */}
-                    <div className="flex items-center space-x-3">
-                      <span className="hidden sm:inline bg-[var(--color-tertiary)]/10 text-[var(--color-tertiary)] text-[10px] border border-[var(--color-tertiary)]/20 px-2.5 py-0.5 rounded-full uppercase tracking-widest font-bold">
-                        {selectedVideo.category}
-                      </span>
-
-                      <button 
-                        onClick={toggleFullscreen}
-                        className="p-1 hover:text-[var(--color-tertiary)] transition-colors"
-                        title="Toggle Fullscreen"
-                      >
-                        {isFullscreen ? <Minimize size={18} /> : <Maximize size={18} />}
-                      </button>
-                    </div>
-
+                  {/* Action Buttons */}
+                  <div className="flex items-center gap-2 self-start shrink-0">
+                    <a
+                      href={video.youtubeUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 px-3 py-1.5 bg-red-600/10 hover:bg-red-600/20 border border-red-500/20 rounded-xl text-xs font-semibold text-red-400 transition-colors"
+                    >
+                      <ExternalLink size={14} />
+                      <span>YouTube</span>
+                    </a>
+                    <button 
+                      onClick={() => handleShare(video)}
+                      className="flex items-center gap-1.5 px-3 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-xs font-semibold text-gray-300 transition-colors"
+                    >
+                      <Share2 size={14} className="text-red-500" />
+                      <span>Share</span>
+                    </button>
                   </div>
-
                 </div>
-              </>
-            )}
-          </div>
 
-          {/* Active Video Info Metadata Details Card */}
-          <div className="bg-[var(--color-surface)] border border-white/5 rounded-2xl p-5 space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
-              <div>
-                <span className="inline-block bg-[var(--color-secondary)]/10 text-[var(--color-secondary)] text-[10px] font-bold border border-[var(--color-secondary)]/20 px-3 py-1 rounded-full uppercase tracking-wider mb-2">
-                  {selectedVideo.category} Group Code
-                </span>
-                <h2 className="text-xl md:text-2xl font-light tracking-wide text-white leading-tight">
-                  {selectedVideo.title}
-                </h2>
-              </div>
+                {/* Quick stats grid */}
+                <div className="flex flex-wrap gap-4 text-xs text-gray-400 border-t border-white/5 pt-3">
+                  <div className="flex items-center gap-1.5">
+                    <Eye size={13} className="text-gray-500" />
+                    <span>{video.views} views</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <Calendar size={13} className="text-gray-500" />
+                    <span>{video.date}</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-red-500 font-bold font-mono text-[10px]">DURATION: {video.duration}</span>
+                  </div>
+                </div>
 
-              {/* Actions/Share */}
-              <div className="flex items-center gap-2 self-start shrink-0">
-                <button 
-                  onClick={handleShare}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-xs font-semibold text-gray-300 transition-colors"
-                >
-                  <Share2 size={14} className="text-[var(--color-tertiary)]" />
-                  <span>Share</span>
-                </button>
+                {/* Description Text */}
+                <p className="text-xs md:text-sm text-[var(--color-on-background)] leading-relaxed bg-black/20 p-4 rounded-xl border border-white/5">
+                  {video.description}
+                </p>
               </div>
             </div>
+          ))}
 
-            {/* Quick stats grid */}
-            <div className="flex flex-wrap gap-4 text-xs text-gray-400 border-t border-white/5 pt-3">
-              <div className="flex items-center gap-1.5">
-                <Eye size={13} className="text-gray-500" />
-                <span>{selectedVideo.views} views</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <Calendar size={13} className="text-gray-500" />
-                <span>Released {selectedVideo.date}</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <Flame size={13} className="text-yellow-500 animate-pulse" />
-                <span className="text-[var(--color-tertiary)] font-bold uppercase tracking-wider">Altruism & Wealth</span>
+          {/* Success toast Notification for Share */}
+          {showShareNotification && (
+            <div className="fixed bottom-6 right-6 z-50 p-4 bg-zinc-950 border border-red-500/30 text-red-400 rounded-xl text-xs font-medium shadow-2xl animate-pulse flex items-center gap-3.5 max-w-sm">
+              <Sparkles size={18} className="text-red-500 shrink-0" />
+              <div className="flex-1 min-w-0">
+                <p className="font-extrabold text-[10px] uppercase tracking-widest text-white leading-tight">Share Link Copied!</p>
+                <p className="truncate text-gray-400 mt-1 text-[11px] font-sans">{copiedTitle}</p>
               </div>
             </div>
-
-            {/* Description Text */}
-            <p className="text-xs md:text-sm text-[var(--color-on-background)] leading-relaxed bg-black/20 p-4 rounded-xl border border-white/5">
-              {selectedVideo.description}
-            </p>
-
-            {/* Success toast Notification for Share */}
-            {showShareNotification && (
-              <div className="p-3 bg-green-500/10 border border-green-500/30 text-green-400 rounded-xl text-xs font-medium animate-pulse flex items-center gap-2">
-                <Sparkles size={14} /> Shared clipboard link copied! Send to partners or governors.
-              </div>
-            )}
-          </div>
+          )}
         </div>
 
-        {/* RIGHT PANEL: SEARCH & PLAYLIST (4cols on lg) */}
+        {/* RIGHT PANEL: SUBSCRIBE CHANNEL PROFILE & STREAM LOADING */}
         <div className="lg:col-span-4 space-y-4">
           
-          {/* Filter, Search & Tab Container */}
-          <div className="bg-[var(--color-surface)] border border-white/5 rounded-2xl p-4 space-y-3">
+          {/* Stunning YouTube Channel Profile Card */}
+          <div className="bg-[var(--color-surface)] border border-white/5 rounded-2xl p-4 flex items-center gap-3 shadow-lg relative overflow-hidden group">
+            {/* Ambient background decoration */}
+            <div className="absolute top-0 right-0 w-24 h-24 bg-red-600/5 rounded-full blur-2xl group-hover:bg-red-600/10 transition-all duration-300 pointer-events-none" />
             
-            {/* Search Input */}
-            <div className="relative">
-              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400">
-                <Search size={16} />
+            <div className="w-11 h-11 rounded-full bg-gradient-to-br from-red-600 to-red-700 flex items-center justify-center text-white shadow relative shrink-0">
+              <Youtube size={20} fill="currentColor" />
+              <span className="absolute -bottom-1 -right-1 w-4.5 h-4.5 bg-blue-500 rounded-full border border-slate-900 flex items-center justify-center text-[7px] font-extrabold text-white" title="Verified Channel">✓</span>
+            </div>
+            
+            <div className="flex-1 min-w-0">
+              <span className="text-xs font-black text-white tracking-wide uppercase truncate block">
+                Stellarium Channel
               </span>
-              <input
-                type="text"
-                placeholder="Search masterclass, AI, suite..."
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-                className="w-full bg-[var(--color-surface-variant)] border border-white/5 rounded-xl pl-10 pr-4 py-3 text-xs text-white placeholder:text-gray-500 focus:outline-none focus:border-[var(--color-tertiary)] transition-colors"
-              />
+              <p className="text-[10px] text-gray-400 font-medium">@stellariumfoundation</p>
+              <div className="flex items-center gap-1.5 mt-0.5 text-[9px] text-red-400 font-bold tracking-tight animate-pulse">
+                <span>● 100K+ Active Members</span>
+              </div>
             </div>
 
-            {/* Category Filter Chips Horizontal */}
-            <div className="flex gap-1.5 overflow-x-auto no-scrollbar pb-1">
-              {categories.map(cat => (
-                <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider shrink-0 transition-all ${
-                    selectedCategory === cat 
-                      ? 'bg-[var(--color-tertiary)] text-black border border-[var(--color-tertiary)]/45' 
-                      : 'bg-white/5 text-gray-400 border border-white/5 hover:bg-white/10 hover:text-white'
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
-
+            <a
+              href="https://youtube.com/@stellariumfoundation?sub_confirmation=1"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white font-bold text-[9px] rounded-lg tracking-wider uppercase transition-colors shrink-0 font-sans"
+            >
+              Subscribe
+            </a>
           </div>
 
-          {/* Playlist List Display */}
-          <div className="space-y-2.5">
-            <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400 flex items-center justify-between px-1">
-              <span>Streaming Playlist</span>
-              <span className="text-[10px] bg-white/5 px-2 py-0.5 rounded-md font-mono">{filteredVideos.length} items</span>
+          {/* Dynamic Link Input Form */}
+          <div className="bg-[var(--color-surface)] border border-white/5 rounded-2xl p-4 space-y-3">
+            <h3 className="text-xs font-bold uppercase tracking-widest text-white flex items-center gap-1.5">
+              <Tv size={14} className="text-red-500" />
+              <span>Stream Any YouTube Link</span>
             </h3>
+            
+            <form onSubmit={handleAddCustomVideo} className="space-y-2">
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  placeholder="Paste watch URL..."
+                  value={customUrl}
+                  onChange={e => setCustomUrl(e.target.value)}
+                  className="flex-1 bg-[var(--color-surface-variant)] border border-white/5 rounded-xl px-3 py-2 text-xs text-white placeholder:text-gray-500 focus:outline-none focus:border-red-500 transition-colors"
+                />
+                <button
+                  type="submit"
+                  className="px-3 bg-red-600 text-white rounded-xl font-bold text-xs hover:bg-red-700 transition-all flex items-center justify-center shadow-lg"
+                >
+                  <Plus size={16} />
+                </button>
+              </div>
 
-            <div className="space-y-2 max-h-[380px] lg:max-h-[500px] overflow-y-auto no-scrollbar pr-1">
-              {filteredVideos.map((video, index) => {
-                const isSelected = video.id === selectedVideo.id;
-                return (
-                  <div
-                    key={video.id}
-                    onClick={() => setSelectedVideo(video)}
-                    className={`group flex items-center gap-3.5 p-3 rounded-xl cursor-pointer border transition-all ${
-                      isSelected 
-                        ? 'bg-[var(--color-surface-variant)] border-[var(--color-tertiary)]/40 shadow-md shadow-[var(--color-tertiary)]/5' 
-                        : 'bg-[var(--color-surface)] border-white/5 hover:border-white/15'
-                    }`}
-                  >
-                    {/* Circle Icon / Thumbnail representation */}
-                    <div className={`w-11 h-11 rounded-lg flex items-center justify-center text-lg shadow-inner shrink-0 transition-transform ${
-                      isSelected 
-                        ? 'bg-[var(--color-tertiary)]/20 border border-[var(--color-tertiary)]/40 scale-105' 
-                        : 'bg-white/5 group-hover:scale-105'
-                    }`}>
-                      {isSelected && isPlaying ? (
-                        <div className="flex gap-0.5 items-end h-5">
-                          <span className="w-0.75 h-3 bg-[var(--color-tertiary)] animate-[bounce_1s_infinite]" />
-                          <span className="w-0.75 h-5 bg-[var(--color-tertiary)] animate-[bounce_1s_infinite_0.2s]" />
-                          <span className="w-0.75 h-4 bg-[var(--color-tertiary)] animate-[bounce_1s_infinite_0.4s]" />
-                        </div>
-                      ) : (
-                        <span>{video.thumbnail}</span>
-                      )}
-                    </div>
-
-                    {/* Title & Metadata */}
-                    <div className="flex-1 min-w-0">
-                      <h4 className={`text-xs font-medium truncate ${isSelected ? 'text-[var(--color-tertiary)] font-bold' : 'text-white'}`}>
-                        {video.title}
-                      </h4>
-                      <div className="flex items-center gap-2 mt-1">
-                        <span className="text-[9px] text-gray-500 uppercase font-mono">{video.category}</span>
-                        <span className="text-[9px] text-gray-600 font-bold">•</span>
-                        <span className="text-[9px] text-gray-500 font-mono">{video.duration} duration</span>
-                      </div>
-                    </div>
-
-                    {/* Play Arrow Indicator on hover */}
-                    <div className="shrink-0 text-gray-500 group-hover:text-[var(--color-tertiary)] transition-colors">
-                      <ChevronRight size={14} />
-                    </div>
-                  </div>
-                );
-              })}
-
-              {filteredVideos.length === 0 && (
-                <div className="p-8 text-center bg-[var(--color-surface)] border border-dashed border-white/10 rounded-xl">
-                  <MonitorPlay size={24} className="mx-auto text-gray-600 mb-2" />
-                  <p className="text-xs text-gray-500">No media titles found.</p>
-                </div>
+              {customError && (
+                <p className="text-[10px] text-red-400 font-medium tracking-wide">
+                  {customError}
+                </p>
               )}
-            </div>
-
+            </form>
           </div>
 
         </div>

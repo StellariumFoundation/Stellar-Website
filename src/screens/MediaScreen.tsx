@@ -3,8 +3,6 @@ import {
   Clapperboard, 
   Eye, 
   Calendar, 
-  Sparkles,
-  Share2,
   Plus,
   Tv,
   ExternalLink,
@@ -16,8 +14,6 @@ export function MediaScreen() {
   const [videoList, setVideoList] = useState<StellariumVideo[]>(STELLARIUM_VIDEOS);
   const [customUrl, setCustomUrl] = useState('');
   const [customError, setCustomError] = useState('');
-  const [showShareNotification, setShowShareNotification] = useState(false);
-  const [copiedTitle, setCopiedTitle] = useState('');
 
   // Helper function to extract YouTube ID from standard URL strings
   const getYouTubeId = (url: string): string | null => {
@@ -54,64 +50,6 @@ export function MediaScreen() {
 
     setVideoList([newVideo, ...videoList]);
     setCustomUrl('');
-  };
-
-  // Action: Copy Share Link
-  const handleShare = (video: StellariumVideo) => {
-    const shareText = `Watch "${video.title}" on YouTube: ${video.youtubeUrl}`;
-    
-    // Fallback for iframe sandboxes where navigator.clipboard is blocked
-    const fallbackCopy = (text: string): boolean => {
-      try {
-        const textarea = document.createElement('textarea');
-        textarea.value = text;
-        textarea.style.position = 'fixed';
-        textarea.style.top = '0';
-        textarea.style.left = '0';
-        textarea.style.opacity = '0';
-        textarea.style.pointerEvents = 'none';
-        document.body.appendChild(textarea);
-        textarea.select();
-        textarea.setSelectionRange(0, 99999); // Mobile compatibility
-        const successful = document.execCommand('copy');
-        document.body.removeChild(textarea);
-        return successful;
-      } catch (err) {
-        console.error('Copy fallback execution failed', err);
-        return false;
-      }
-    };
-
-    const showSuccessToast = () => {
-      setCopiedTitle(video.title);
-      setShowShareNotification(true);
-      setTimeout(() => setShowShareNotification(false), 3000);
-    };
-
-    if (navigator.clipboard && window.isSecureContext) {
-      navigator.clipboard.writeText(shareText)
-        .then(() => {
-          showSuccessToast();
-        })
-        .catch(() => {
-          if (fallbackCopy(shareText)) {
-            showSuccessToast();
-          } else {
-            // Fallback: update state to let user know they can copy manually
-            setCopiedTitle(`Ctrl+C to copy: ${video.youtubeUrl}`);
-            setShowShareNotification(true);
-            setTimeout(() => setShowShareNotification(false), 5000);
-          }
-        });
-    } else {
-      if (fallbackCopy(shareText)) {
-        showSuccessToast();
-      } else {
-        setCopiedTitle(`Copy link: ${video.youtubeUrl}`);
-        setShowShareNotification(true);
-        setTimeout(() => setShowShareNotification(false), 5000);
-      }
-    }
   };
 
   return (
@@ -174,13 +112,6 @@ export function MediaScreen() {
                       <ExternalLink size={14} />
                       <span>YouTube</span>
                     </a>
-                    <button 
-                      onClick={() => handleShare(video)}
-                      className="flex items-center gap-1.5 px-3 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-xs font-semibold text-gray-300 transition-colors"
-                    >
-                      <Share2 size={14} className="text-red-500" />
-                      <span>Share</span>
-                    </button>
                   </div>
                 </div>
 
@@ -206,17 +137,6 @@ export function MediaScreen() {
               </div>
             </div>
           ))}
-
-          {/* Success toast Notification for Share */}
-          {showShareNotification && (
-            <div className="fixed bottom-6 right-6 z-50 p-4 bg-zinc-950 border border-red-500/30 text-red-400 rounded-xl text-xs font-medium shadow-2xl animate-pulse flex items-center gap-3.5 max-w-sm">
-              <Sparkles size={18} className="text-red-500 shrink-0" />
-              <div className="flex-1 min-w-0">
-                <p className="font-extrabold text-[10px] uppercase tracking-widest text-white leading-tight">Share Link Copied!</p>
-                <p className="truncate text-gray-400 mt-1 text-[11px] font-sans">{copiedTitle}</p>
-              </div>
-            </div>
-          )}
         </div>
 
         {/* RIGHT PANEL: SUBSCRIBE CHANNEL PROFILE & STREAM LOADING */}

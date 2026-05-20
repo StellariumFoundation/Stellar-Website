@@ -4,6 +4,8 @@ import { BottomSheet } from '../components/BottomSheet';
 import { FileText, Download, Eye, ArrowLeft, Facebook, Instagram, Twitter, Send, MessageCircle, Copy, Youtube } from 'lucide-react';
 import Markdown from 'react-markdown';
 import { RESUME_MARKDOWN } from '../data/resume';
+import johnVictorPhoto from '../assets/images/john_victor_uploaded_1779243778611.png';
+
 
 const TikTokIcon = ({ size = 24, className = "" }: { size?: number, className?: string }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className}>
@@ -34,6 +36,20 @@ export function HomeScreen() {
           </h1>
         </div>
         <div className="flex-1 overflow-y-auto p-6 md:p-12 pb-32 flex flex-col items-center max-w-3xl mx-auto w-full">
+          {/* Cover Photo Header */}
+          <div className="flex flex-col items-center mb-8">
+            <div className="relative group">
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-red-650 via-pink-650 to-amber-600 rounded-full blur-md opacity-40 group-hover:opacity-70 transition duration-1000 group-hover:duration-200"></div>
+              <div className="relative bg-black rounded-full p-1 border border-white/5">
+                <img
+                  src={johnVictorPhoto}
+                  alt="John Victor"
+                  className="w-32 h-32 rounded-full object-cover shadow-2xl border border-white/10"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+            </div>
+          </div>
           <div className="w-full">
             <Markdown
               components={{
@@ -110,6 +126,22 @@ export function HomeScreen() {
 
       <div className="mt-10 w-full max-w-md flex flex-col items-center border-t border-white/10 pt-8">
         <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-on-surface)] mb-4">Founder Profile</h3>
+        
+        {/* Beautiful Founder Mini Card */}
+        <div className="flex items-center gap-4 bg-[var(--color-surface)] border border-white/5 p-4 rounded-2xl w-full mb-4">
+          <img
+            src={johnVictorPhoto}
+            alt="John Victor"
+            className="w-16 h-16 rounded-xl object-cover border border-white/10 bg-zinc-900 shadow-md"
+            referrerPolicy="no-referrer"
+          />
+          <div className="flex-1 min-w-0 bg-transparent text-left">
+            <h4 className="text-sm font-bold text-white tracking-wide">John Victor</h4>
+            <p className="text-[10px] text-[var(--color-secondary)] font-bold uppercase tracking-widest mt-0.5">Founder & Wealth Activist</p>
+            <p className="text-xs text-gray-400 mt-1 line-clamp-1">Propelling global wealth creation and sovereign enterprise systems.</p>
+          </div>
+        </div>
+
         <div className="flex gap-4 w-full justify-center">
           <button 
             onClick={() => setShowResume(true)}

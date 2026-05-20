@@ -7,6 +7,34 @@ import { RESUME_MARKDOWN } from '../data/resume';
 import johnVictorPhoto from '../assets/images/john_victor_uploaded_1779243778611.png';
 
 
+const PHOTO_PATHS = [
+  '/john_victor.png',
+  '/john_victor.jpg',
+  '/john_victor.jpeg',
+  '/john_victor.PNG',
+  '/john_victor.JPG',
+  '/john_victor.JPEG',
+  johnVictorPhoto
+];
+
+function FounderImage({ className, alt }: { className: string; alt: string }) {
+  const [pathIndex, setPathIndex] = useState(0);
+
+  return (
+    <img
+      src={PHOTO_PATHS[pathIndex]}
+      alt={alt}
+      className={className}
+      onError={() => {
+        if (pathIndex < PHOTO_PATHS.length - 1) {
+          setPathIndex(prev => prev + 1);
+        }
+      }}
+      referrerPolicy="no-referrer"
+    />
+  );
+}
+
 const TikTokIcon = ({ size = 24, className = "" }: { size?: number, className?: string }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className}>
     <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
@@ -41,11 +69,9 @@ export function HomeScreen() {
             <div className="relative group">
               <div className="absolute -inset-0.5 bg-gradient-to-r from-red-650 via-pink-650 to-amber-600 rounded-full blur-md opacity-40 group-hover:opacity-70 transition duration-1000 group-hover:duration-200"></div>
               <div className="relative bg-black rounded-full p-1 border border-white/5">
-                <img
-                  src={johnVictorPhoto}
+                <FounderImage
                   alt="John Victor"
-                  className="w-32 h-32 rounded-full object-cover shadow-2xl border border-white/10"
-                  referrerPolicy="no-referrer"
+                  className="w-32 h-32 rounded-full object-cover shadow-2xl border border-white/10 animate-fade-in"
                 />
               </div>
             </div>
@@ -129,11 +155,9 @@ export function HomeScreen() {
         
         {/* Beautiful Founder Mini Card */}
         <div className="flex items-center gap-4 bg-[var(--color-surface)] border border-white/5 p-4 rounded-2xl w-full mb-4">
-          <img
-            src={johnVictorPhoto}
+          <FounderImage
             alt="John Victor"
             className="w-16 h-16 rounded-xl object-cover border border-white/10 bg-zinc-900 shadow-md"
-            referrerPolicy="no-referrer"
           />
           <div className="flex-1 min-w-0 bg-transparent text-left">
             <h4 className="text-sm font-bold text-white tracking-wide">John Victor</h4>

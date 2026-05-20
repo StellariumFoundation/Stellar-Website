@@ -4,17 +4,17 @@ import { BottomSheet } from '../components/BottomSheet';
 import { FileText, Download, Eye, ArrowLeft, Facebook, Instagram, Twitter, Send, MessageCircle, Copy, Youtube } from 'lucide-react';
 import Markdown from 'react-markdown';
 import { RESUME_MARKDOWN } from '../data/resume';
-import johnVictorPhoto from '../assets/images/john_victor_uploaded_1779243778611.png';
+import johnVictorPhoto from '../assets/images/john_victor_uploaded_1779243778611.png.jpg';
 
 
 const PHOTO_PATHS = [
+  johnVictorPhoto,
   '/john_victor.png',
   '/john_victor.jpg',
   '/john_victor.jpeg',
   '/john_victor.PNG',
   '/john_victor.JPG',
-  '/john_victor.JPEG',
-  johnVictorPhoto
+  '/john_victor.JPEG'
 ];
 
 function FounderImage({ className, alt }: { className: string; alt: string }) {

@@ -17,68 +17,98 @@ export function LibraryScreen() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   useEffect(() => {
+    // Helper function to process and categorize the raw list of books
+    function processBooks(books: StellariumDocument[]) {
+      setAllBooks(books);
+      
+      const indexBook = books.find(b => b.title.trim().toLowerCase() === "stellarium literature");
+      
+      if (!indexBook) {
+        setGroupedBooks({ "All Literature": [...books].sort((a, b) => a.title.localeCompare(b.title)) });
+        return;
+      }
+
+      const categorizedMap: Record<string, StellariumDocument[]> = {};
+      const booksByTitle: Record<string, StellariumDocument> = {};
+      books.forEach(b => {
+        booksByTitle[b.title.trim().toLowerCase()] = b;
+      });
+      
+      const assignedTitles = new Set<string>();
+      assignedTitles.add(indexBook.title.trim().toLowerCase());
+
+      const lines = indexBook.content.split('\n');
+      let currentCategory = "General";
+      const linkPattern = /\[(.*?)\]\(.*?\)/;
+
+      for (const line of lines) {
+        const trimmed = line.trim();
+        
+        if (trimmed.startsWith("**") && trimmed.endsWith("**") && trimmed.length > 4) {
+          currentCategory = trimmed.substring(2, trimmed.length - 2).trim();
+          continue;
+        }
+
+        const match = trimmed.match(linkPattern);
+        if (match && match[1]) {
+          const extractedTitle = match[1].trim();
+          const book = booksByTitle[extractedTitle.toLowerCase()];
+          
+          if (book) {
+            if (!categorizedMap[currentCategory]) {
+              categorizedMap[currentCategory] = [];
+            }
+            categorizedMap[currentCategory].push(book);
+            assignedTitles.add(book.title.trim().toLowerCase());
+          }
+        }
+      }
+
+      const unassigned = books.filter(b => !assignedTitles.has(b.title.trim().toLowerCase()));
+      if (unassigned.length > 0) {
+        categorizedMap["Other Resources"] = unassigned;
+      }
+
+      setGroupedBooks(categorizedMap);
+    }
+
+    // Try loading immediately from local storage cache for absolute instant load times
+    let hasLoadedFromCache = false;
+    try {
+      const cached = localStorage.getItem('stellarium_literature_cache');
+      if (cached) {
+        const parsedBooks = JSON.parse(cached) as StellariumDocument[];
+        if (Array.isArray(parsedBooks) && parsedBooks.length > 0) {
+          processBooks(parsedBooks);
+          setIsLoading(false);
+          hasLoadedFromCache = true;
+        }
+      }
+    } catch (e) {
+      console.warn("Error parsing literature cache", e);
+    }
+
     async function loadBooks() {
       try {
         const res = await fetch('/literature.json');
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         
         const books: StellariumDocument[] = await res.json();
-        setAllBooks(books);
         
-        // Organize books
-        const indexBook = books.find(b => b.title.trim().toLowerCase() === "stellarium literature");
-        
-        if (!indexBook) {
-          setGroupedBooks({ "All Literature": [...books].sort((a, b) => a.title.localeCompare(b.title)) });
-          setIsLoading(false);
-          return;
+        // Save to cache for instant load next time
+        try {
+          localStorage.setItem('stellarium_literature_cache', JSON.stringify(books));
+        } catch (e) {
+          console.warn("Failed to write literature cache to localStorage", e);
         }
 
-        const categorizedMap: Record<string, StellariumDocument[]> = {};
-        const booksByTitle: Record<string, StellariumDocument> = {};
-        books.forEach(b => {
-          booksByTitle[b.title.trim().toLowerCase()] = b;
-        });
-        
-        const assignedTitles = new Set<string>();
-        assignedTitles.add(indexBook.title.trim().toLowerCase());
-
-        const lines = indexBook.content.split('\n');
-        let currentCategory = "General";
-        const linkPattern = /\[(.*?)\]\(.*?\)/;
-
-        for (const line of lines) {
-          const trimmed = line.trim();
-          
-          if (trimmed.startsWith("**") && trimmed.endsWith("**") && trimmed.length > 4) {
-            currentCategory = trimmed.substring(2, trimmed.length - 2).trim();
-            continue;
-          }
-
-          const match = trimmed.match(linkPattern);
-          if (match && match[1]) {
-            const extractedTitle = match[1].trim();
-            const book = booksByTitle[extractedTitle.toLowerCase()];
-            
-            if (book) {
-              if (!categorizedMap[currentCategory]) {
-                categorizedMap[currentCategory] = [];
-              }
-              categorizedMap[currentCategory].push(book);
-              assignedTitles.add(book.title.trim().toLowerCase());
-            }
-          }
-        }
-
-        const unassigned = books.filter(b => !assignedTitles.has(b.title.trim().toLowerCase()));
-        if (unassigned.length > 0) {
-          categorizedMap["Other Resources"] = unassigned;
-        }
-
-        setGroupedBooks(categorizedMap);
+        processBooks(books);
+        setErrorMsg(null);
       } catch (e: any) {
         console.error(e);
-        setErrorMsg(`Error loading library. Ensure 'literature.json' exists. ${e.message}`);
+        if (!hasLoadedFromCache) {
+          setErrorMsg(`Error loading library. Ensure 'literature.json' exists. ${e.message}`);
+        }
       } finally {
         setIsLoading(false);
       }

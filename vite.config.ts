@@ -37,6 +37,50 @@ export default defineConfig(({mode}) => {
         workbox: {
           globPatterns: ['**/*.{js,css,html,ico,png,svg,json,pdf}'],
           maximumFileSizeToCacheInBytes: 15 * 1024 * 1024, // 15MB to allow for PDFs
+          runtimeCaching: [
+            {
+              urlPattern: /^https:\/\/img\.youtube\.com\/vi\/.*/i,
+              handler: 'CacheFirst',
+              options: {
+                cacheName: 'youtube-images',
+                expiration: {
+                  maxEntries: 200,
+                  maxAgeSeconds: 60 * 24 * 60 * 60, // 60 Days
+                },
+                cacheableResponse: {
+                  statuses: [0, 200]
+                }
+              }
+            },
+            {
+              urlPattern: /^https:\/\/images\.unsplash\.com\/.*/i,
+              handler: 'CacheFirst',
+              options: {
+                cacheName: 'unsplash-images',
+                expiration: {
+                  maxEntries: 100,
+                  maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Days
+                },
+                cacheableResponse: {
+                  statuses: [0, 200]
+                }
+              }
+            },
+            {
+              urlPattern: /^https:\/\/fonts\.(?:googleapis|gstatic)\.com\/.*/i,
+              handler: 'CacheFirst',
+              options: {
+                cacheName: 'google-fonts',
+                expiration: {
+                  maxEntries: 30,
+                  maxAgeSeconds: 365 * 24 * 60 * 60, // 1 Year
+                },
+                cacheableResponse: {
+                  statuses: [0, 200]
+                }
+              }
+            }
+          ]
         }
       })
     ],

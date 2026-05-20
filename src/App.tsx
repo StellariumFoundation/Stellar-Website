@@ -19,6 +19,32 @@ export default function App() {
     }
   }, []);
 
+  // Warm up caches for literature and quizzes to make them load instantly
+  useEffect(() => {
+    const preheat = async () => {
+      try {
+        const fetchLit = fetch('/literature.json').then(async (res) => {
+          if (res.ok) {
+            const data = await res.json();
+            localStorage.setItem('stellarium_literature_cache', JSON.stringify(data));
+          }
+        });
+        const fetchQuiz = fetch('/quizzes.json').then(async (res) => {
+          if (res.ok) {
+            const data = await res.json();
+            localStorage.setItem('stellarium_quizzes_cache', JSON.stringify(data));
+          }
+        });
+        await Promise.allSettled([fetchLit, fetchQuiz]);
+      } catch (err) {
+        console.warn("Silent preheat failed or offline", err);
+      }
+    };
+    // Delay preheating slightly to allow the primary home landing page to render unhindered
+    const timer = setTimeout(preheat, 1200);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <div className="flex flex-col h-[100dvh] w-full bg-transparent">
       {/* Main Content Area */}

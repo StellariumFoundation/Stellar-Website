@@ -23,35 +23,66 @@ export function QuizScreen() {
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // Load JSON Data & Create "All" Category
+  // Load JSON Data & Create "All" Category with Stale-While-Revalidate Caching
   useEffect(() => {
+    function processQuizzes(rootObject: any) {
+      const topicsArray = rootObject.topics || [];
+      
+      const loadedCategories: QuizCategory[] = topicsArray.map((topicObj: any) => ({
+        name: topicObj.topicName,
+        questions: (topicObj.questions || []).map((qObj: any) => ({
+          text: String(qObj.text),
+          options: Array.isArray(qObj.options) ? qObj.options.map(String) : [],
+          correctIndex: Number(qObj.correctIndex)
+        }))
+      }));
+
+      const allQuestions = loadedCategories.flatMap(c => c.questions);
+      const generalCategory: QuizCategory = {
+        name: "General Knowledge (All Topics)",
+        questions: allQuestions
+      };
+
+      setCategories([generalCategory, ...loadedCategories]);
+    }
+
+    // Attempt instant retrieval from local cache
+    let hasLoadedFromCache = false;
+    try {
+      const cached = localStorage.getItem('stellarium_quizzes_cache');
+      if (cached) {
+        const rootObj = JSON.parse(cached);
+        if (rootObj && Array.isArray(rootObj.topics)) {
+          processQuizzes(rootObj);
+          setIsLoading(false);
+          hasLoadedFromCache = true;
+        }
+      }
+    } catch (e) {
+      console.warn("Error parsing quizzes cache", e);
+    }
+
     async function loadQuizzes() {
       try {
         const res = await fetch('/quizzes.json');
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         
         const rootObject = await res.json();
-        const topicsArray = rootObject.topics || [];
         
-        const loadedCategories: QuizCategory[] = topicsArray.map((topicObj: any) => ({
-          name: topicObj.topicName,
-          questions: topicObj.questions.map((qObj: any) => ({
-            text: String(qObj.text),
-            options: Array.isArray(qObj.options) ? qObj.options.map(String) : [],
-            correctIndex: Number(qObj.correctIndex)
-          }))
-        }));
+        // Save to cache for next time
+        try {
+          localStorage.setItem('stellarium_quizzes_cache', JSON.stringify(rootObject));
+        } catch (e) {
+          console.warn("Failed to write quizzes cache to localStorage", e);
+        }
 
-        const allQuestions = loadedCategories.flatMap(c => c.questions);
-        const generalCategory: QuizCategory = {
-          name: "General Knowledge (All Topics)",
-          questions: allQuestions
-        };
-
-        setCategories([generalCategory, ...loadedCategories]);
+        processQuizzes(rootObject);
+        setErrorMessage(null);
       } catch (e: any) {
         console.error(e);
-        setErrorMessage(`Error loading quizzes: ${e.message}`);
+        if (!hasLoadedFromCache) {
+          setErrorMessage(`Error loading quizzes: ${e.message}`);
+        }
       } finally {
         setIsLoading(false);
       }

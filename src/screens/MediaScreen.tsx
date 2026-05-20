@@ -14,12 +14,22 @@ export function MediaScreen() {
   const [videoList, setVideoList] = useState<StellariumVideo[]>(STELLARIUM_VIDEOS);
   const [customUrl, setCustomUrl] = useState('');
   const [customError, setCustomError] = useState('');
+  const [playingMap, setPlayingMap] = useState<Record<string, boolean>>({});
 
   // Helper function to extract YouTube ID from standard URL strings
   const getYouTubeId = (url: string): string | null => {
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
     const match = url.match(regExp);
     return (match && match[2].length === 11) ? match[2] : null;
+  };
+
+  // Helper function to resolve YouTube thumbnail
+  const getThumbnailUrl = (video: StellariumVideo): string | null => {
+    let id = getYouTubeId(video.youtubeUrl);
+    if (!id) {
+      id = getYouTubeId(video.url);
+    }
+    return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : null;
   };
 
   // Add custom URL stream handler 
@@ -77,16 +87,60 @@ export function MediaScreen() {
               key={video.id}
               className="bg-[var(--color-surface)] border border-white/5 rounded-2xl overflow-hidden shadow-2xl transition-all duration-300 hover:border-white/10"
             >
-              {/* Custom YouTube iframe player with absolute in-app embed mode constraint */}
-              <div className="relative bg-black rounded-t-2xl overflow-hidden border-b border-white/10 aspect-video transform-gpu">
-                <iframe
-                  src={`${video.url}?rel=0&modestbranding=1`}
-                  title={video.title}
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="w-full h-full object-cover"
-                />
+              {/* Intelligent YouTube Thumbnail Overlay & Lazy Player Loader */}
+              <div 
+                className="relative bg-black rounded-t-2xl overflow-hidden border-b border-white/10 aspect-video transform-gpu cursor-pointer group/video"
+                onClick={() => {
+                  if (!playingMap[video.id]) {
+                    setPlayingMap(prev => ({ ...prev, [video.id]: true }));
+                  }
+                }}
+              >
+                {playingMap[video.id] ? (
+                  <iframe
+                    src={`${video.url}?rel=0&modestbranding=1&autoplay=1`}
+                    title={video.title}
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="w-full h-full object-cover animate-fade-in"
+                  />
+                ) : (
+                  <div className="relative w-full h-full">
+                    {/* Instant HD Thumbnail Image */}
+                    <img
+                      src={getThumbnailUrl(video) || 'https://images.unsplash.com/photo-1541185933-ef5d8ed016c2?q=80&w=800'}
+                      alt={video.title}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover/video:scale-[1.03] select-none"
+                      referrerPolicy="no-referrer"
+                    />
+
+                    {/* Dark gradient overlay */}
+                    <div className="absolute inset-0 bg-black/45 group-hover/video:bg-black/55 transition-colors duration-300 flex items-center justify-center">
+                      
+                      {/* Premium YouTube red play button */}
+                      <div className="w-16 h-16 rounded-full bg-red-600/90 group-hover/video:bg-red-600 group-hover/video:scale-110 text-white flex items-center justify-center shadow-2xl transform transition-all duration-300 border border-white/10">
+                        <svg className="w-6 h-6 fill-current translate-x-0.5" viewBox="0 0 24 24">
+                          <path d="M8 5v14l11-7z" stroke="currentColor" strokeWidth="1" strokeLinejoin="round" />
+                        </svg>
+                      </div>
+
+                    </div>
+
+                    {/* Quick duration label in bottom right corner */}
+                    <div className="absolute bottom-3 right-3 px-2 py-0.5 bg-black/80 backdrop-blur-sm border border-white/10 rounded-md text-[10px] font-bold text-gray-200 uppercase tracking-widest font-mono">
+                      {video.duration}
+                    </div>
+
+                    {/* Pulse element for custom live stream items */}
+                    {video.views === "Live Stream Feed" && (
+                      <div className="absolute top-3 left-3 px-2.5 py-1 bg-red-600 rounded-lg text-[9px] font-bold text-white uppercase tracking-wider animate-pulse flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white block animate-ping" />
+                        <span>LIVE</span>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* Video Info Metadata Details Card Body */}

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Home, Book, FileQuestion, CircleDollarSign, Mail } from 'lucide-react';
+import { Home, Book, PlayCircle, FileQuestion, CircleDollarSign, Mail } from 'lucide-react';
 import { HomeScreen } from './screens/HomeScreen';
 import { LibraryScreen } from './screens/LibraryScreen';
+import { MediaScreen } from './screens/MediaScreen';
 import { QuizScreen } from './screens/QuizScreen';
 import { SponsorScreen } from './screens/SponsorScreen';
 import { ContactScreen } from './screens/ContactScreen';
 
-type Tab = 'home' | 'books' | 'quiz' | 'sponsor' | 'contact';
+type Tab = 'home' | 'books' | 'media' | 'quiz' | 'sponsor' | 'contact';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<Tab>('home');
@@ -24,6 +25,7 @@ export default function App() {
       <div className="flex-1 overflow-hidden relative">
         {activeTab === 'home' && <HomeScreen />}
         {activeTab === 'books' && <LibraryScreen />}
+        {activeTab === 'media' && <MediaScreen />}
         {activeTab === 'quiz' && <QuizScreen />}
         {activeTab === 'sponsor' && <SponsorScreen onContact={() => setActiveTab('contact')} />}
         {activeTab === 'contact' && <ContactScreen />}
@@ -43,6 +45,12 @@ export default function App() {
             label="Library" 
             isActive={activeTab === 'books'} 
             onClick={() => setActiveTab('books')} 
+          />
+          <NavButton 
+            icon={PlayCircle} 
+            label="Media" 
+            isActive={activeTab === 'media'} 
+            onClick={() => setActiveTab('media')} 
           />
           <NavButton 
             icon={FileQuestion} 

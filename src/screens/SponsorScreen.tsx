@@ -102,42 +102,42 @@ export function SponsorScreen({ onContact }: { onContact?: () => void }) {
   }
 
   return (
-    <div className="flex flex-col h-full overflow-y-auto w-full p-6 items-center">
-      <h1 className="text-3xl font-normal text-center mt-2">
+    <div className="flex flex-col h-full overflow-y-auto w-full p-4 sm:p-6 items-center">
+      <h1 className="text-2xl sm:text-3xl font-normal text-center mt-1">
         Support the Mission
       </h1>
 
-      <div className="w-full max-w-md mt-6">
-        <div className="bg-[var(--color-surface)] border border-white/10 rounded-2xl p-6 flex flex-col items-center">
-           <h2 className="text-xl font-bold text-[var(--color-secondary)]">Become a Partner</h2>
-           <p className="text-sm text-[var(--color-on-surface)] mt-2 text-center leading-relaxed">
+      <div className="w-full max-w-md mt-4">
+        <div className="bg-[var(--color-surface)] border border-white/10 rounded-2xl p-4 sm:p-5 flex flex-col items-center">
+           <h2 className="text-base sm:text-lg font-bold text-[var(--color-secondary)]">Become a Partner</h2>
+           <p className="text-xs sm:text-sm text-[var(--color-on-surface)] mt-1 text-center leading-relaxed">
             Gain a platform of global cultural relevance to advertise your brand. Support the Stellarium Foundation and align your business with prosperity and peace.
            </p>
-           <button onClick={onContact} className="mt-6 px-6 py-2 bg-[var(--color-tertiary)] text-black font-bold uppercase tracking-wider text-xs rounded-full hover:opacity-90 active:scale-95 transition-all">
+           <button onClick={onContact} className="mt-4 px-6 py-2 bg-[var(--color-tertiary)] text-black font-bold uppercase tracking-wider text-[10px] rounded-full hover:opacity-90 active:scale-95 transition-all">
              Contact for a Deal
            </button>
         </div>
       </div>
 
-      <h2 className="text-sm font-semibold text-gray-400 mt-10 mb-4 uppercase tracking-widest text-center">
+      <h2 className="text-xs font-semibold text-gray-400 mt-6 mb-3 uppercase tracking-widest text-center">
         Choose Payment Method
       </h2>
 
-      <div className="grid grid-cols-2 gap-4 w-full max-w-md pb-24">
-         <button onClick={() => setSelectedMethod('bank')} className="h-28 bg-[var(--color-surface)] border border-white/5 rounded-2xl flex flex-col justify-center items-center hover:bg-white/5">
-            <Landmark size={32} className="text-white mb-3" />
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 w-full max-w-md pb-16">
+         <button onClick={() => setSelectedMethod('bank')} className="h-20 sm:h-22 bg-[var(--color-surface)] border border-white/5 rounded-2xl flex flex-col justify-center items-center hover:bg-white/5">
+            <Landmark size={22} className="text-white mb-2" />
             <span className="text-white font-semibold text-xs tracking-wide">Bank Deposit</span>
          </button>
-         <button onClick={() => setSelectedMethod('crypto')} className="h-28 bg-[var(--color-surface)] border border-white/5 rounded-2xl flex flex-col justify-center items-center hover:bg-white/5">
-            <Bitcoin size={32} className="text-[var(--color-tertiary)] mb-3" />
+         <button onClick={() => setSelectedMethod('crypto')} className="h-20 sm:h-22 bg-[var(--color-surface)] border border-white/5 rounded-2xl flex flex-col justify-center items-center hover:bg-white/5">
+            <Bitcoin size={22} className="text-[var(--color-tertiary)] mb-2" />
             <span className="text-[var(--color-tertiary)] font-semibold text-xs tracking-wide">Crypto</span>
          </button>
-         <button onClick={() => setSelectedMethod('patreon')} className="h-28 bg-[var(--color-surface)] border border-white/5 rounded-2xl flex flex-col justify-center items-center hover:bg-white/5">
-            <DollarSign size={32} className="text-white mb-3" />
+         <button onClick={() => setSelectedMethod('patreon')} className="h-20 sm:h-22 bg-[var(--color-surface)] border border-white/5 rounded-2xl flex flex-col justify-center items-center hover:bg-white/5">
+            <DollarSign size={22} className="text-white mb-2" />
             <span className="text-white font-semibold text-xs tracking-wide">Patreon</span>
          </button>
-         <button onClick={() => setSelectedMethod('paypal')} className="h-28 bg-[var(--color-surface)] border border-white/5 rounded-2xl flex flex-col justify-center items-center hover:bg-white/5">
-            <CreditCard size={32} className="text-[var(--color-secondary)] mb-3" />
+         <button onClick={() => setSelectedMethod('paypal')} className="h-20 sm:h-22 bg-[var(--color-surface)] border border-white/5 rounded-2xl flex flex-col justify-center items-center hover:bg-white/5">
+            <CreditCard size={22} className="text-[var(--color-secondary)] mb-2" />
             <span className="text-[var(--color-secondary)] font-semibold text-xs tracking-wide">PayPal</span>
          </button>
       </div>

@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
 
 @font-face {
   font-family: 'Neue Frutiger World';
@@ -11,7 +10,7 @@
 
 @theme {
   --font-sans: "Neue Frutiger World", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Playfair Display", ui-serif, Georgia, serif;
+  --font-serif: "Neue Frutiger World", ui-sans-serif, system-ui, sans-serif;
 
   
   --color-primary: #FFFFFF;

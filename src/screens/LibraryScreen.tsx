@@ -132,16 +132,16 @@ export function LibraryScreen() {
           <div className="w-full">
             <Markdown
               components={{
-                h1: ({node, ...props}) => <h1 className="text-3xl sm:text-4xl font-serif font-bold text-white text-center mt-12 mb-8 leading-tight" {...props} />,
-                h2: ({node, ...props}) => <h2 className="text-2xl sm:text-3xl font-serif font-semibold text-[var(--color-tertiary)] text-center mt-10 mb-6 border-b border-[var(--color-tertiary)]/20 pb-4" {...props} />,
-                h3: ({node, ...props}) => <h3 className="text-xl font-serif font-medium text-[var(--color-secondary)] text-center mt-8 mb-4" {...props} />,
-                p: ({node, ...props}) => <p className="text-base sm:text-lg leading-relaxed text-[var(--color-on-background)] text-center mb-6 mx-auto max-w-2xl font-sans" {...props} />,
-                a: ({node, ...props}) => <a className="text-[var(--color-tertiary)] hover:text-white underline decoration-[var(--color-tertiary)]/50 underline-offset-4 transition-colors font-semibold" {...props} />,
+                h1: ({node, ...props}) => <h1 className="text-2xl sm:text-3xl font-serif font-bold text-white text-center mt-8 mb-6 leading-tight" {...props} />,
+                h2: ({node, ...props}) => <h2 className="text-xl sm:text-2xl font-serif font-semibold text-[var(--color-tertiary)] text-center mt-8 mb-5 border-b border-[var(--color-tertiary)]/20 pb-3" {...props} />,
+                h3: ({node, ...props}) => <h3 className="text-lg font-serif font-medium text-[var(--color-secondary)] text-center mt-6 mb-3" {...props} />,
+                p: ({node, ...props}) => <p className="text-xs sm:text-sm leading-relaxed text-[var(--color-on-background)] text-center mb-4 mx-auto max-w-2xl font-sans" {...props} />,
+                a: ({node, ...props}) => <a className="text-[var(--color-tertiary)] hover:text-white underline decoration-[var(--color-tertiary)]/50 underline-offset-4 transition-colors font-semibold text-xs sm:text-sm" {...props} />,
                 strong: ({node, ...props}) => <strong className="font-bold text-white" {...props} />,
-                ul: ({node, ...props}) => <ul className="space-y-3 mb-8 block mx-auto text-left w-full max-w-lg list-none" {...props} />,
-                ol: ({node, ...props}) => <ol className="space-y-3 mb-8 block mx-auto text-left w-full max-w-lg list-decimal list-inside text-[var(--color-on-background)]" {...props} />,
-                li: ({node, ...props}) => <li className="flex items-start text-base sm:text-lg text-[var(--color-on-background)] before:content-['✦'] before:text-[var(--color-secondary)] before:mr-3 before:font-bold" {...props} />,
-                blockquote: ({node, ...props}) => <blockquote className="border-l-4 border-[var(--color-secondary)] pl-6 py-2 my-8 italic text-lg text-white/80 max-w-2xl mx-auto bg-white/5 rounded-r-xl" {...props} />,
+                ul: ({node, ...props}) => <ul className="space-y-2 mb-6 block mx-auto text-left w-full max-w-lg list-none text-xs sm:text-sm" {...props} />,
+                ol: ({node, ...props}) => <ol className="space-y-2 mb-6 block mx-auto text-left w-full max-w-lg list-decimal list-inside text-[var(--color-on-background)] text-xs sm:text-sm" {...props} />,
+                li: ({node, ...props}) => <li className="flex items-start text-xs sm:text-sm text-[var(--color-on-background)] before:content-['✦'] before:text-[var(--color-secondary)] before:mr-3 before:font-bold" {...props} />,
+                blockquote: ({node, ...props}) => <blockquote className="border-l-4 border-[var(--color-secondary)] pl-6 py-2 my-6 italic text-xs sm:text-sm text-white/80 max-w-2xl mx-auto bg-white/5 rounded-r-xl" {...props} />,
               }}
             >
               {selectedBook.content}

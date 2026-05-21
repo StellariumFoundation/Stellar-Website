@@ -3,17 +3,12 @@ import {
   Clapperboard, 
   Eye, 
   Calendar, 
-  Plus,
-  Tv,
   ExternalLink,
   Youtube
 } from 'lucide-react';
 import { STELLARIUM_VIDEOS, StellariumVideo } from '../media/videos';
 
 export function MediaScreen() {
-  const [videoList, setVideoList] = useState<StellariumVideo[]>(STELLARIUM_VIDEOS);
-  const [customUrl, setCustomUrl] = useState('');
-  const [customError, setCustomError] = useState('');
   const [playingMap, setPlayingMap] = useState<Record<string, boolean>>({});
 
   // Helper function to extract YouTube ID from standard URL strings
@@ -30,36 +25,6 @@ export function MediaScreen() {
       id = getYouTubeId(video.url);
     }
     return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : null;
-  };
-
-  // Add custom URL stream handler 
-  const handleAddCustomVideo = (e: React.FormEvent) => {
-    e.preventDefault();
-    setCustomError('');
-
-    if (!customUrl.trim()) return;
-
-    const videoId = getYouTubeId(customUrl);
-    if (!videoId) {
-      setCustomError('Please enter a valid YouTube Watch URL (e.g., https://youtube.com/watch?v=...)');
-      return;
-    }
-
-    const newVideo: StellariumVideo = {
-      id: `custom-${Date.now()}`,
-      title: `Custom Live Stream: ${videoId}`,
-      description: `Loaded dynamically from provided YouTube content watch link: ${customUrl}`,
-      url: `https://www.youtube.com/embed/${videoId}`,
-      youtubeUrl: customUrl,
-      duration: "Dynamic",
-      thumbnail: "📺",
-      category: "Vision",
-      views: "Live Stream Feed",
-      date: "Just Now"
-    };
-
-    setVideoList([newVideo, ...videoList]);
-    setCustomUrl('');
   };
 
   return (
@@ -82,7 +47,7 @@ export function MediaScreen() {
         {/* LEFT PANEL: VERTICAL STREAMING FEED OF IN-APP EMBEDDED VIDEOS WITH DETAILS */}
         <div className="lg:col-span-8 space-y-6">
           
-          {videoList.map((video) => (
+          {STELLARIUM_VIDEOS.map((video) => (
             <div 
               key={video.id}
               className="bg-[var(--color-surface)] border border-white/5 rounded-2xl overflow-hidden shadow-2xl transition-all duration-300 hover:border-white/10"
@@ -193,7 +158,7 @@ export function MediaScreen() {
           ))}
         </div>
 
-        {/* RIGHT PANEL: SUBSCRIBE CHANNEL PROFILE & STREAM LOADING */}
+        {/* RIGHT PANEL: SUBSCRIBE CHANNEL PROFILE */}
         <div className="lg:col-span-4 space-y-4">
           
           {/* Stunning YouTube Channel Profile Card */}
@@ -224,38 +189,6 @@ export function MediaScreen() {
             >
               Subscribe
             </a>
-          </div>
-
-          {/* Dynamic Link Input Form */}
-          <div className="bg-[var(--color-surface)] border border-white/5 rounded-2xl p-4 space-y-3">
-            <h3 className="text-xs font-bold uppercase tracking-widest text-white flex items-center gap-1.5">
-              <Tv size={14} className="text-red-500" />
-              <span>Stream Any YouTube Link</span>
-            </h3>
-            
-            <form onSubmit={handleAddCustomVideo} className="space-y-2">
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  placeholder="Paste watch URL..."
-                  value={customUrl}
-                  onChange={e => setCustomUrl(e.target.value)}
-                  className="flex-1 bg-[var(--color-surface-variant)] border border-white/5 rounded-xl px-3 py-2 text-xs text-white placeholder:text-gray-500 focus:outline-none focus:border-red-500 transition-colors"
-                />
-                <button
-                  type="submit"
-                  className="px-3 bg-red-600 text-white rounded-xl font-bold text-xs hover:bg-red-700 transition-all flex items-center justify-center shadow-lg"
-                >
-                  <Plus size={16} />
-                </button>
-              </div>
-
-              {customError && (
-                <p className="text-[10px] text-red-400 font-medium tracking-wide">
-                  {customError}
-                </p>
-              )}
-            </form>
           </div>
 
         </div>

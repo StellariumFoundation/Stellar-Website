@@ -261,30 +261,30 @@ function QuizSessionView({
   const progress = ((currentIndex + 1) / session.questions.length) * 100;
 
   return (
-     <div className="flex flex-col h-full overflow-y-auto w-full p-6 pt-12 items-center max-w-xl mx-auto pb-24">
+     <div className="flex flex-col h-full overflow-y-auto w-full px-4 sm:px-6 pt-6 sm:pt-10 items-center max-w-2xl mx-auto pb-12">
        <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden mb-4">
           <div className="h-full bg-[var(--color-tertiary)] transition-all duration-300" style={{ width: `${progress}%` }} />
        </div>
-       <p className="text-xs text-[var(--color-tertiary)] font-bold mb-8 uppercase tracking-widest">
+       <p className="text-[10px] sm:text-xs text-[var(--color-tertiary)] font-semibold mb-4 uppercase tracking-widest">
          Question {currentIndex + 1} of {session.questions.length}
        </p>
 
-       <h3 className="text-2xl font-bold text-center text-white mb-12 leading-relaxed">
+       <h3 className="text-base sm:text-lg font-normal text-center text-white/90 mb-6 px-2 tracking-wide leading-relaxed">
          {question.text}
        </h3>
 
-       <div className="w-full space-y-3">
+       <div className="w-full space-y-2.5">
          {question.options.map((option, idx) => (
            <button
              key={idx}
              onClick={() => handleAnswer(idx)}
-             className="w-full bg-white text-black py-4 px-6 rounded-xl font-bold text-center hover:bg-gray-200 active:scale-[0.98] transition-all shadow-sm"
+             className="w-full bg-white/95 hover:bg-white text-black py-3 sm:py-3.5 px-5 rounded-xl text-xs sm:text-sm font-medium text-center active:scale-[0.98] transition-all shadow-md tracking-wide"
            >
              {option}
            </button>
          ))}
        </div>
-    </div>
+     </div>
   );
 }
 

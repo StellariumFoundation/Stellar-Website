@@ -12,7 +12,7 @@ export default defineConfig(({mode}) => {
       tailwindcss(),
       VitePWA({
         registerType: 'autoUpdate',
-        includeAssets: ['favicon.ico', 'icon.png', '*.json', '*.pdf'],
+        includeAssets: ['favicon.ico', 'icon.png', '*.json', '*.pdf', '*.ttf'],
         manifest: {
           name: 'Stellarium App',
           short_name: 'Stellarium',
@@ -35,7 +35,7 @@ export default defineConfig(({mode}) => {
           ]
         },
         workbox: {
-          globPatterns: ['**/*.{js,css,html,ico,png,svg,json,pdf}'],
+          globPatterns: ['**/*.{js,css,html,ico,png,svg,json,pdf,ttf}'],
           maximumFileSizeToCacheInBytes: 15 * 1024 * 1024, // 15MB to allow for PDFs
           runtimeCaching: [
             {

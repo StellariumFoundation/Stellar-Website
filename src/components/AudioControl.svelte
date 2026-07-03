@@ -3,12 +3,11 @@
   import { onMount } from 'svelte';
 
   const tracks = ['/dvorak.opus', '/egmont.opus'];
-  const audioSrc = tracks[Math.floor(Math.random() * tracks.length)];
+  let currentIdx = $state(Math.floor(Math.random() * tracks.length));
 
   let muted = $state(true);
   let audioEl: HTMLAudioElement | undefined = $state();
   let firstClick = $state(true);
-  let fallbackTried = $state(false);
 
   $effect(() => {
     if (audioEl) {
@@ -16,13 +15,16 @@
     }
   });
 
-  function onError() {
-    if (!audioEl || fallbackTried) return;
-    fallbackTried = true;
-    const other = audioSrc === '/dvorak.opus' ? '/egmont.opus' : '/dvorak.opus';
-    audioEl.src = other;
+  function nextTrack() {
+    currentIdx = (currentIdx + 1) % tracks.length;
+    if (!audioEl) return;
+    audioEl.src = tracks[currentIdx];
     audioEl.load();
     audioEl.play().catch(() => {});
+  }
+
+  function onError() {
+    nextTrack();
   }
 
   function handleFirstInteraction(e: Event) {
@@ -57,7 +59,15 @@
   }
 </script>
 
-<audio bind:this={audioEl} src={audioSrc} preload="auto" autoplay muted loop onerror={onError} />
+<audio
+  bind:this={audioEl}
+  src={tracks[currentIdx]}
+  preload="auto"
+  autoplay
+  muted
+  onended={nextTrack}
+  onerror={onError}
+/>
 
 <button
   onclick={toggle}

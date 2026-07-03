@@ -12,12 +12,10 @@
     "lint": "tsc --noEmit",
     "ws": "bun ws-server.ts",
     "server": "bun ws-server.ts",
-    "cap": "cap",
-    "postinstall": "bun patches/apply.ts"
+    "cap": "cap"
   },
   "dependencies": {
     "@capacitor/core": "^8.4.1",
-    "@capacitor/filesystem": "^8.1.2",
     "@capacitor/share": "^8.0.1",
     "@capacitor/status-bar": "8.0.2",
     "@types/markdown-it": "^14.1.2",

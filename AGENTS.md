@@ -86,7 +86,7 @@ Keystore decoding from `${{ secrets.KEYSTORE_BASE64 }}` is required for release 
 - **Keystore guarded**: Both `android/app/build.gradle` and `StellariumCaller/app/build.gradle.kts` wrap release signing in `if (keystorePath)` to not break debug builds.
 - **Capacitor app name**: `"Stellarium Foundation"` in `capacitor.config.ts`. Native Android uses `strings.xml`. Both must stay in sync.
 - **Mic permission**: `RECORD_AUDIO` + `MODIFY_AUDIO_SETTINGS` in Capacitor `AndroidManifest.xml`; `NSMicrophoneUsageDescription` in iOS `Info.plist`. Not via Capacitor plugins.
-- **Two Android Gradle projects**: `android/` (Capacitor, AGP 9.2.1, Gradle 9.4.1, JDK 26 Zulu on CI) and `StellariumCaller/` (native, AGP 9.2.1, Gradle 9.4.1, JDK 26 Zulu on CI). Capacitor uses plain Java; manually patches `@capacitor/filesystem`'s `build.gradle` to remove `kotlin-android` plugin (AGP 9.x has it built-in). Patch survives `bun install` via `postinstall` script (`patches/apply.ts` + `patches/capacitor-filesystem-build.gradle`). Android SDK 36 per Capacitor 8 guide.
+- **Two Android Gradle projects**: `android/` (Capacitor, AGP 9.2.1, Gradle 9.4.1, JDK 26 Zulu on CI) and `StellariumCaller/` (native, AGP 9.2.1, Gradle 9.4.1, JDK 26 Zulu on CI). Capacitor uses Java only. Android SDK 36 per Capacitor 8 guide.
 - **@lucide/svelte brand icons**: `Twitter` was renamed to `X`, `Youtube` removed — use `PlaySquare` instead. Check available icons in `node_modules/@lucide/svelte/dist/icons/`.
 - **`.opencode/` directory**: Contains speckit agent commands. Don't modify unless updating OpenCode config.
 - **WebSocket server URL** is injected via `window.__WS_URL__` in `index.html` (points to Render).

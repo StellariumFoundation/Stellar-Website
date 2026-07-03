@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup ImageMagick
         run: |
@@ -56,12 +56,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Java JDK
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
-          java-version: '21'
+          java-version: '25'
           distribution: 'temurin'
           cache: 'gradle'
 
@@ -85,7 +85,7 @@ jobs:
           if ! unzip -t android/gradle/wrapper/gradle-wrapper.jar &>/dev/null; then
             echo "gradle-wrapper.jar is corrupt, downloading fresh copy..."
             rm -f android/gradle/wrapper/gradle-wrapper.jar
-            curl -fsSL "https://github.com/gradle/gradle/raw/v8.14.3/gradle/wrapper/gradle-wrapper.jar" \
+            curl -fsSL "https://github.com/gradle/gradle/raw/v9.4.1/gradle/wrapper/gradle-wrapper.jar" \
               -o android/gradle/wrapper/gradle-wrapper.jar
             chmod 644 android/gradle/wrapper/gradle-wrapper.jar
           fi
@@ -122,12 +122,12 @@ jobs:
     needs: generate-android-icons
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Java JDK
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
-          java-version: '21'
+          java-version: '25'
           distribution: 'temurin'
           cache: 'gradle'
 
@@ -141,7 +141,7 @@ jobs:
           if ! unzip -t StellariumCaller/gradle/wrapper/gradle-wrapper.jar &>/dev/null; then
             echo "gradle-wrapper.jar is corrupt, downloading fresh copy..."
             rm -f StellariumCaller/gradle/wrapper/gradle-wrapper.jar
-            curl -fsSL "https://github.com/gradle/gradle/raw/v8.14.3/gradle/wrapper/gradle-wrapper.jar" \
+            curl -fsSL "https://github.com/gradle/gradle/raw/v9.4.1/gradle/wrapper/gradle-wrapper.jar" \
               -o StellariumCaller/gradle/wrapper/gradle-wrapper.jar
             chmod 644 StellariumCaller/gradle/wrapper/gradle-wrapper.jar
           fi
@@ -176,7 +176,7 @@ jobs:
     runs-on: macos-26
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2

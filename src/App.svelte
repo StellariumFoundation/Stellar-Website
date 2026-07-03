@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Home, Book, PlayCircle, FileQuestion, CircleDollarSign, Mail, WifiOff } from 'lucide-svelte';
+  import { Home, Book, PlayCircle, FileQuestion, CircleDollarSign, Mail, WifiOff } from '@lucide/svelte';
   import HomeScreen from './screens/HomeScreen.svelte';
   import LibraryScreen from './screens/LibraryScreen.svelte';
   import MediaScreen from './screens/MediaScreen.svelte';

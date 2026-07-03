@@ -1,6 +1,6 @@
 <script lang="ts">
   import { slide, fade } from 'svelte/transition';
-  import { X } from 'lucide-svelte';
+  import { X } from '@lucide/svelte';
 
   let { isOpen, onClose, children }: { isOpen: boolean; onClose: () => void; children?: import('svelte').Snippet } = $props();
 </script>

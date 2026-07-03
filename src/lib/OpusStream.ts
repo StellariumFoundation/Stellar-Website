@@ -80,7 +80,7 @@ class OpusStream {
   }
 
   async playPacket(packet: Uint8Array): Promise<void> {
-    const blob = new Blob([packet], { type: this.selectedMimeType || PREFERRED_TYPES[0] });
+    const blob = new Blob([packet as BlobPart], { type: this.selectedMimeType || PREFERRED_TYPES[0] });
     const url = URL.createObjectURL(blob);
     const audio = new Audio(url);
     audio.onended = () => URL.revokeObjectURL(url);

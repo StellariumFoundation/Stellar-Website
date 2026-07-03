@@ -1,7 +1,7 @@
 <script lang="ts">
   import { BANK_DETAILS } from '../data';
   import BottomSheet from '../components/BottomSheet.svelte';
-  import { Landmark, Bitcoin, DollarSign, CreditCard, Copy, Handshake } from 'lucide-svelte';
+  import { Landmark, Bitcoin, DollarSign, CreditCard, Copy, Handshake } from '@lucide/svelte';
 
   let { onContact }: { onContact?: () => void } = $props();
 

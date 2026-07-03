@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Mail, Shield, Zap, Copy, CheckCircle, Phone, PhoneOff, Mic } from 'lucide-svelte';
+  import { Mail, Shield, Zap, Copy, CheckCircle, Phone, PhoneOff, Mic } from '@lucide/svelte';
   import { callClient } from '../utils/callClient';
 
   let email = $state('');

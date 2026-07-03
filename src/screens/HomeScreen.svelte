@@ -1,6 +1,6 @@
 <script lang="ts">
   import { marked } from 'marked';
-  import { ArrowLeft, Twitter, Send, MessageCircle, Copy, Youtube, Droplet, ExternalLink, Shield, CheckCircle, Globe, Lightbulb, Briefcase, Users, TrendingUp, Brain, Eye, Download } from 'lucide-svelte';
+  import { ArrowLeft, X, Send, MessageCircle, Copy, PlaySquare, Droplet, ExternalLink, Shield, CheckCircle, Globe, Lightbulb, Briefcase, Users, TrendingUp, Brain, Eye, Download } from '@lucide/svelte';
   import { HOME_TOPICS } from '../data';
   import { RESUME_MARKDOWN } from '../data/resume';
   import { savePdf } from '../pdf';
@@ -398,11 +398,11 @@
           <span class="text-xs font-medium text-white truncate">Stellarium (Telegram)</span>
         </a>
         <a href="https://youtube.com/@johnvictorwomen?si=CoeYDeowTy0gIQMi" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 p-3 bg-[var(--color-surface)] border border-white/5 rounded-xl hover:bg-white/5 transition-colors group transform-gpu">
-          <Youtube size={20} class="text-[#FF0000] group-hover:scale-110 transition-transform flex-shrink-0 will-change-transform" />
+          <PlaySquare size={20} class="text-[#FF0000] group-hover:scale-110 transition-transform flex-shrink-0 will-change-transform" />
           <span class="text-xs font-medium text-white truncate">John (YouTube)</span>
         </a>
         <a href="https://youtube.com/@stellariumfoundation?si=fZP8YYH6VrgGrZKV" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 p-3 bg-[var(--color-surface)] border border-white/5 rounded-xl hover:bg-white/5 transition-colors group transform-gpu">
-          <Youtube size={20} class="text-[#FF0000] group-hover:scale-110 transition-transform flex-shrink-0 will-change-transform" />
+          <PlaySquare size={20} class="text-[#FF0000] group-hover:scale-110 transition-transform flex-shrink-0 will-change-transform" />
           <span class="text-xs font-medium text-white truncate">Stellarium (YouTube)</span>
         </a>
         <a href="https://vk.ru/id1113302487" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 p-3 bg-[var(--color-surface)] border border-white/5 rounded-xl hover:bg-white/5 transition-colors group transform-gpu">
@@ -422,7 +422,7 @@
           </span>
         </button>
         <a href="https://x.com/StellarFou4749" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 p-3 bg-[var(--color-surface)] border border-white/5 rounded-xl hover:bg-white/5 transition-colors group transform-gpu">
-          <Twitter size={20} class="text-white group-hover:scale-110 transition-transform flex-shrink-0 will-change-transform" />
+          <X size={20} class="text-white group-hover:scale-110 transition-transform flex-shrink-0 will-change-transform" />
           <span class="text-xs font-medium text-white">X (Twitter)</span>
         </a>
       </div>

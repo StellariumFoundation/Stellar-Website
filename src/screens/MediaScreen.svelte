@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Clapperboard, Eye, Calendar, ExternalLink, Youtube, Flame, Sparkles, Cpu, Compass, Heart, Play } from 'lucide-svelte';
+  import { Clapperboard, Eye, Calendar, ExternalLink, PlaySquare, Flame, Sparkles, Cpu, Compass, Heart, Play } from '@lucide/svelte';
   import { STELLARIUM_VIDEOS, type StellariumVideo } from '../media/videos';
 
   let playingMap = $state<Record<string, boolean>>({});
@@ -217,7 +217,7 @@
         <div class="absolute top-0 right-0 w-24 h-24 bg-red-600/5 rounded-full blur-2xl group-hover:bg-red-600/10 transition-all duration-300 pointer-events-none" />
         <div class="flex items-center gap-3">
           <div class="w-11 h-11 rounded-full bg-gradient-to-br from-red-600 to-red-700 flex items-center justify-center text-white shadow relative shrink-0">
-            <Youtube size={20} fill="currentColor" />
+            <PlaySquare size={20} fill="currentColor" />
             <span class="absolute -bottom-1 -right-1 w-4 h-4 bg-blue-500 rounded-full border border-slate-900 flex items-center justify-center text-[7px]  text-white">✓</span>
           </div>
           <div class="flex-1 min-w-0">

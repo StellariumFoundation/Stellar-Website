@@ -151,7 +151,7 @@ class CallClient {
 
       const response = await fetch(`${this.baseUrl}/caller`, {
         method: 'POST',
-        body: packet,
+        body: packet as BodyInit,
         headers: { 'Content-Type': 'application/octet-stream' }
       });
 

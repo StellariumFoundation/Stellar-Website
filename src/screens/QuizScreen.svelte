@@ -1,5 +1,5 @@
 <script lang="ts">
-  import BookOpen from 'lucide-svelte/icons/book-open';
+  import BookOpen from '@lucide/svelte/icons/book-open';
 
   type Question = { text: string; options: string[]; correctIndex: number };
   type QuizCategory = { name: string; questions: Question[] };

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { marked } from 'marked';
-  import { ArrowLeft, Twitter, Send, MessageCircle, Copy, Youtube, Droplet, ExternalLink, Shield, CheckCircle, Globe, Lightbulb, Briefcase, Users, TrendingUp, Brain, Eye, Download, Smartphone, Monitor, Sparkles, Star, Orbit, Compass, ChevronRight } from 'lucide-svelte';
+  import { ArrowLeft, Twitter, Send, MessageCircle, Copy, Youtube, Droplet, ExternalLink, Shield, CheckCircle, Globe, Lightbulb, Briefcase, Users, TrendingUp, Brain, Eye, Download, Smartphone, Monitor, Sparkles, Star, Orbit, Compass, ChevronRight } from '@lucide/svelte';
   import { HOME_TOPICS } from '../data';
   import { RESUME_MARKDOWN } from '../data/resume';
   import { savePdf, openPdf } from '../pdf';

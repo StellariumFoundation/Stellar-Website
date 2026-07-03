@@ -1,6 +1,6 @@
 <script lang="ts">
   import MarkdownIt from 'markdown-it';
-  import { ArrowLeft, BookOpen, ExternalLink, Download, Sparkles, Star, Orbit, Compass } from 'lucide-svelte';
+  import { ArrowLeft, BookOpen, ExternalLink, Download, Sparkles, Star, Orbit, Compass } from '@lucide/svelte';
   import { openPdf, savePdf } from '../pdf';
 
   type StellariumDocument = {

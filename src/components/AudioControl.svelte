@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Volume2, VolumeX } from 'lucide-svelte';
+  import { Volume2, VolumeX } from '@lucide/svelte';
   import { onMount } from 'svelte';
 
   const tracks = ['/dvorak.opus', '/egmont.opus'];

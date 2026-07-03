@@ -58,6 +58,13 @@ dependencies {
 
 apply from: 'capacitor.build.gradle'
 
+android {
+    compileOptions {
+        sourceCompatibility JavaVersion.current()
+        targetCompatibility JavaVersion.current()
+    }
+}
+
 try {
     def servicesJSON = file('google-services.json')
     if (servicesJSON.text) {

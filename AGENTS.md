@@ -60,13 +60,17 @@ src/
 - **TailwindCSS 4**: Uses `@import "tailwindcss"` + `@theme` block + `@layer` directives (not Tailwind 3 `@tailwind` directives or `tailwind.config.js`).
 
 ## CI/CD (`.github/workflows/build-mobile.yml`)
-Uses `actions/checkout@v6`, `actions/setup-java@v5` with JDK 25 Temurin.
+Uses `actions/checkout@v6`, `actions/setup-java@v5` with JDK 26 Zulu, `oven-sh/setup-bun@v2`.
 On push to `main`/`master`:
 1. Generate Android launcher icons from `assets/logo.png`
 2. Build Capacitor Android APK + AAB (requires `KEYSTORE_BASE64` etc. secrets)
 3. Build StellariumCaller APK + AAB
 4. Build iOS simulator (macOS runner)
-5. Create GitHub release with all artifacts as date-tagged download links
+5. Create continuous date-tagged release (`release-YYYYMMDD-HHMMSS`) with all artifacts
+
+On push of semver tag `v*`:
+1-4 same as above
+5. Create versioned GitHub Release with the tag name
 
 Keystore decoding from `${{ secrets.KEYSTORE_BASE64 }}` is required for release builds in CI.
 
@@ -82,7 +86,7 @@ Keystore decoding from `${{ secrets.KEYSTORE_BASE64 }}` is required for release 
 - **Keystore guarded**: Both `android/app/build.gradle` and `StellariumCaller/app/build.gradle.kts` wrap release signing in `if (keystorePath)` to not break debug builds.
 - **Capacitor app name**: `"Stellarium Foundation"` in `capacitor.config.ts`. Native Android uses `strings.xml`. Both must stay in sync.
 - **Mic permission**: `RECORD_AUDIO` + `MODIFY_AUDIO_SETTINGS` in Capacitor `AndroidManifest.xml`; `NSMicrophoneUsageDescription` in iOS `Info.plist`. Not via Capacitor plugins.
-- **Two Android Gradle projects**: `android/` (Capacitor, AGP 9.2.1, Gradle 9.4.1, JDK 25) and `StellariumCaller/` (native, AGP 9.2.1, Gradle 9.4.1, JDK 25). Capcitor uses plain Java; manually patches `@capacitor/filesystem`'s `build.gradle` to remove `kotlin-android` plugin (AGP 9.x has it built-in). Patch survives `bun install` via `postinstall` script (`patches/apply.ts` + `patches/capacitor-filesystem-build.gradle`).
+- **Two Android Gradle projects**: `android/` (Capacitor, AGP 9.2.1, Gradle 9.4.1, JDK 26 Zulu on CI) and `StellariumCaller/` (native, AGP 9.2.1, Gradle 9.4.1, JDK 26 Zulu on CI). Capacitor uses plain Java; manually patches `@capacitor/filesystem`'s `build.gradle` to remove `kotlin-android` plugin (AGP 9.x has it built-in). Patch survives `bun install` via `postinstall` script (`patches/apply.ts` + `patches/capacitor-filesystem-build.gradle`). Android SDK 36 per Capacitor 8 guide.
 - **@lucide/svelte brand icons**: `Twitter` was renamed to `X`, `Youtube` removed — use `PlaySquare` instead. Check available icons in `node_modules/@lucide/svelte/dist/icons/`.
 - **`.opencode/` directory**: Contains speckit agent commands. Don't modify unless updating OpenCode config.
 - **WebSocket server URL** is injected via `window.__WS_URL__` in `index.html` (points to Render).

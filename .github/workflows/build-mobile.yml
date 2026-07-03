@@ -228,8 +228,16 @@ jobs:
     name: Create Continuous Release
     runs-on: ubuntu-latest
     needs: [build-android-capacitor, build-android-stellariumcaller, build-ios]
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' && !startsWith(github.ref, 'refs/tags/v')
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+
+      - name: Extract Version
+        id: version
+        run: |
+          echo "app_version=v$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+
       - name: Generate Date-Based Tag
         id: tag
         run: |
@@ -276,68 +284,102 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.tag.outputs.release_tag }}
-          name: 🚀 Stellarium Foundation v1.0.0 — ${{ steps.tag.outputs.release_tag }}
+          name: ${{ steps.version.outputs.app_version }} — ${{ steps.tag.outputs.release_tag }}
           body: |
-            # 🚀 Stellarium Foundation — v1.0.0
+            # Stellarium Foundation — ${{ steps.version.outputs.app_version }}
 
             > **Build:** ${{ steps.tag.outputs.release_tag }} · **Commit:** `${{ github.sha }}`
 
             ---
 
-            ## ✨ What's New
+            ## Downloads
 
-            - **Progressive Web App** — Full offline support via service worker caching
-            - **Knowledge Quiz** — General Knowledge and topic-based quiz modules
-            - **Walkie-Talkie Audio** — Real-time PTT voice chat with room-based multi-participant support
-            - **Background Audio Player** — Ambient classical music (Dvořák & Egmont)
-            - **Interactive Library** — Stellarium literature viewer with PDF downloads
-            - **Sponsor Portal** — In-app donation flow (Bank, Crypto, Patreon, PayPal)
-            - **Secure Communications** — End-to-end encrypted message form + Tor anonymous messaging node
-            - **Cross-Platform** — Web + Android (Capacitor) + StellariumCaller (Owner App)
-
-            ---
-
-            ## 📦 Downloads
-
-            ### Android (Capacitor) — Stellarium Foundation App
+            ### Android (Capacitor)
             | File | Type |
             |------|------|
             | [📱 `Stellarium-Foundation-Android-${{ steps.tag.outputs.release_tag }}.apk`](./Stellarium-Foundation-Android-${{ steps.tag.outputs.release_tag }}.apk) | Release APK (signed) |
-            | [📦 `Stellarium-Foundation-Android-${{ steps.tag.outputs.release_tag }}.aab`](./Stellarium-Foundation-Android-${{ steps.tag.outputs.release_tag }}.aab) | Android App Bundle (Play Store) |
+            | [📦 `Stellarium-Foundation-Android-${{ steps.tag.outputs.release_tag }}.aab`](./Stellarium-Foundation-Android-${{ steps.tag.outputs.release_tag }}.aab) | Android App Bundle |
 
             ### Android (Owner) — StellariumCaller
             | File | Type |
             |------|------|
-            | [📱 `Stellarium-Caller-Owner-${{ steps.tag.outputs.release_tag }}.apk`](./Stellarium-Caller-Owner-${{ steps.tag.outputs.release_tag }}.apk) | Release APK (signed, optimized) |
-            | [📦 `Stellarium-Caller-Owner-${{ steps.tag.outputs.release_tag }}.aab`](./Stellarium-Caller-Owner-${{ steps.tag.outputs.release_tag }}.aab) | Android App Bundle (Play Store) |
+            | [📱 `Stellarium-Caller-Owner-${{ steps.tag.outputs.release_tag }}.apk`](./Stellarium-Caller-Owner-${{ steps.tag.outputs.release_tag }}.apk) | Release APK (signed) |
+            | [📦 `Stellarium-Caller-Owner-${{ steps.tag.outputs.release_tag }}.aab`](./Stellarium-Caller-Owner-${{ steps.tag.outputs.release_tag }}.aab) | Android App Bundle |
 
-            ### iOS
+            ### iOS (Simulator)
             | File | Type |
             |------|------|
             | [🍏 `Stellarium-Foundation-iOS-Simulator-${{ steps.tag.outputs.release_tag }}.zip`](./Stellarium-Foundation-iOS-Simulator-${{ steps.tag.outputs.release_tag }}.zip) | Simulator build |
+          files: release-files/*
 
-            ---
+  versioned-release:
+    name: Create Versioned Release
+    runs-on: ubuntu-latest
+    needs: [build-android-capacitor, build-android-stellariumcaller, build-ios]
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
 
-            ## 🛠 Install Instructions
+      - name: Extract Version
+        id: version
+        run: |
+          echo "app_version=${{ github.ref_name }}" >> $GITHUB_OUTPUT
 
-            ### Android
-            1. Download the `.apk` or `.aab` for your device
-            2. Enable **Install from unknown sources** in Settings → Security
-            3. Open the downloaded file and tap **Install**
+      - name: Download All Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
 
-            ### Web (PWA)
-            1. Open [stellarium.app](https://stellariumfoundation.github.io/StellarWebsite/) in Chrome/Edge
-            2. Tap the **Install** button in the address bar or the Home screen Install button
-            3. The app launches in standalone mode with full offline support
+      - name: Rename Artifacts for Release
+        env:
+          TAG: ${{ steps.version.outputs.app_version }}
+        run: |
+          mkdir -p release-files
 
-            ### iOS
-            - The simulator build is for Xcode testing only
-            - For device installation, deploy via Xcode or TestFlight
+          APK_FILE=$(find artifacts/android-capacitor-artifacts -name "*.apk" -type f 2>/dev/null | head -1)
+          if [ -n "$APK_FILE" ]; then
+            cp "$APK_FILE" "release-files/Stellarium-Foundation-Android-$TAG.apk"
+          fi
+          AAB_FILE=$(find artifacts/android-capacitor-artifacts -name "*.aab" -type f 2>/dev/null | head -1)
+          if [ -n "$AAB_FILE" ]; then
+            cp "$AAB_FILE" "release-files/Stellarium-Foundation-Android-$TAG.aab"
+          fi
 
-            ---
+          OWNER_APK=$(find artifacts/stellariumcaller-artifacts -name "app-release.apk" -type f 2>/dev/null | head -1)
+          if [ -n "$OWNER_APK" ]; then
+            cp "$OWNER_APK" "release-files/Stellarium-Caller-Owner-$TAG.apk"
+          fi
+          OWNER_AAB=$(find artifacts/stellariumcaller-artifacts -name "app-release.aab" -type f 2>/dev/null | head -1)
+          if [ -n "$OWNER_AAB" ]; then
+            cp "$OWNER_AAB" "release-files/Stellarium-Caller-Owner-$TAG.aab"
+          fi
 
-            ## 🔗 Links
-            - **Website:** https://stellariumfoundation.github.io/StellarWebsite/
-            - **WebSocket Server:** `wss://stellarwebsite-ws.onrender.com/ws`
-            - **Repository:** ${{ github.repository }}
+          IOS_ZIP=$(find artifacts/ios-simulator-build -name "*.zip" -type f 2>/dev/null | head -1)
+          if [ -n "$IOS_ZIP" ]; then
+            cp "$IOS_ZIP" "release-files/Stellarium-Foundation-iOS-Simulator-$TAG.zip"
+          fi
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.app_version }}
+          name: ${{ steps.version.outputs.app_version }}
+          body: |
+            # Stellarium Foundation — ${{ steps.version.outputs.app_version }}
+
+            > **Commit:** `${{ github.sha }}`
+
+            ## Downloads
+
+            ### Android (Capacitor)
+            - [APK](https://github.com/${{ github.repository }}/releases/download/${{ steps.version.outputs.app_version }}/Stellarium-Foundation-Android-${{ steps.version.outputs.app_version }}.apk)
+            - [AAB](https://github.com/${{ github.repository }}/releases/download/${{ steps.version.outputs.app_version }}/Stellarium-Foundation-Android-${{ steps.version.outputs.app_version }}.aab)
+
+            ### Android (Owner) — StellariumCaller
+            - [APK](https://github.com/${{ github.repository }}/releases/download/${{ steps.version.outputs.app_version }}/Stellarium-Caller-Owner-${{ steps.version.outputs.app_version }}.apk)
+            - [AAB](https://github.com/${{ github.repository }}/releases/download/${{ steps.version.outputs.app_version }}/Stellarium-Caller-Owner-${{ steps.version.outputs.app_version }}.aab)
+
+            ### iOS (Simulator)
+            - [Simulator Build](https://github.com/${{ github.repository }}/releases/download/${{ steps.version.outputs.app_version }}/Stellarium-Foundation-iOS-Simulator-${{ steps.version.outputs.app_version }}.zip)
           files: release-files/*

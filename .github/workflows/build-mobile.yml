@@ -61,8 +61,8 @@ jobs:
       - name: Setup Java JDK
         uses: actions/setup-java@v5
         with:
-          java-version: '25'
-          distribution: 'temurin'
+          java-version: '26'
+          distribution: 'zulu'
           cache: 'gradle'
 
       - name: Setup Bun (Fast JavaScript Runtime)
@@ -127,8 +127,8 @@ jobs:
       - name: Setup Java JDK
         uses: actions/setup-java@v5
         with:
-          java-version: '25'
-          distribution: 'temurin'
+          java-version: '26'
+          distribution: 'zulu'
           cache: 'gradle'
 
       - name: Setup Bun (Fast JavaScript Runtime)

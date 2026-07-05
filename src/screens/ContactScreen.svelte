@@ -14,10 +14,16 @@
   let callErrorText = $state('');
   let isPTT = $state(false);
   let isRecording = $state(false);
+  let micDenied = $state(false);
 
   $effect(() => {
     const unsub1 = callClient.callState.subscribe((v) => callState = v);
-    const unsub2 = callClient.errorText.subscribe((v) => callErrorText = v);
+    const unsub2 = callClient.errorText.subscribe((v) => {
+      callErrorText = v;
+      if (v.toLowerCase().includes('permission') || v.toLowerCase().includes('denied') || v.toLowerCase().includes('mic')) {
+        micDenied = true;
+      }
+    });
     const unsub3 = opusStream.recording.subscribe((v) => isRecording = v);
     return () => {
       unsub1();
@@ -102,6 +108,12 @@
       <p class="text-xs lg:text-sm xl:text-base text-gray-300 leading-relaxed text-left">
         Walkie-talkie voice with John Victor. Hold to talk, release to listen. Requires microphone access.
       </p>
+
+      {#if micDenied}
+        <div class="bg-red-900/30 border border-red-500/30 rounded-xl p-3 text-xs text-red-300 text-center">
+          Microphone permission denied. Go to system settings → App permissions → Microphone → Allow.
+        </div>
+      {/if}
 
       {#if callState === 'idle' || callState === 'failed' || callState === 'no_answer'}
         <button

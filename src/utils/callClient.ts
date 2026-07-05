@@ -69,6 +69,14 @@ class CallClient {
     this.callStateWritable.set('calling');
 
     try {
+      await opusStream.initStream();
+    } catch (e: any) {
+      this.errorTextWritable.set(e.message || 'Microphone setup failed');
+      this.callStateWritable.set('failed');
+      return;
+    }
+
+    try {
       const response = await fetch(`${this.baseUrl}/caller`, {
         method: 'GET',
         signal: this.abortController.signal
@@ -125,7 +133,6 @@ class CallClient {
       case 'call_answered':
         if (this.callTimeout) clearTimeout(this.callTimeout);
         this.callStateWritable.set('in_call');
-        opusStream.initStream().catch((e: any) => console.error('initStream error:', e));
         break;
       case 'error':
         if (this.callTimeout) clearTimeout(this.callTimeout);

@@ -6,6 +6,7 @@
   import QuizScreen from './screens/QuizScreen.svelte';
   import SponsorScreen from './screens/SponsorScreen.svelte';
   import ContactScreen from './screens/ContactScreen.svelte';
+  import PrivacyScreen from './screens/PrivacyScreen.svelte';
   import AudioControl from './components/AudioControl.svelte';
 
   let location = $state(window.location.pathname);
@@ -44,7 +45,7 @@
 
   function isKnownRoute(path: string): boolean {
     if (path === '/' || path === '') return true;
-    const knownPaths = ['/library', '/media', '/quiz', '/sponsor', '/contact'];
+    const knownPaths = ['/library', '/media', '/quiz', '/sponsor', '/contact', '/privacy'];
     return knownPaths.some(p => path.startsWith(p));
   }
 
@@ -117,6 +118,7 @@
     <div class={matchRoute('/quiz') ? 'h-full' : 'hidden'}><QuizScreen /></div>
     <div class={matchRoute('/sponsor') ? 'h-full' : 'hidden'}><SponsorScreen onContact={() => navigate('/contact')} /></div>
     <div class={matchRoute('/contact') ? 'h-full' : 'hidden'}><ContactScreen /></div>
+    <div class={matchRoute('/privacy') ? 'h-full' : 'hidden'}><PrivacyScreen /></div>
   </div>
 
   <AudioControl />

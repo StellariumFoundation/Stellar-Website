@@ -11,46 +11,6 @@ permissions:
   contents: write
 
 jobs:
-  generate-android-icons:
-    name: Generate Launcher Icons for StellariumCaller
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v6
-
-      - name: Setup ImageMagick
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y imagemagick
-
-      - name: Generate Mipmap Icons
-        run: |
-          mkdir -p StellariumCaller/app/src/main/res/mipmap-mdpi
-          mkdir -p StellariumCaller/app/src/main/res/mipmap-hdpi
-          mkdir -p StellariumCaller/app/src/main/res/mipmap-xhdpi
-          mkdir -p StellariumCaller/app/src/main/res/mipmap-xxhdpi
-          mkdir -p StellariumCaller/app/src/main/res/mipmap-xxxhdpi
-
-          # mdpi (48x48)
-          convert assets/logo.png -resize 48x48 StellariumCaller/app/src/main/res/mipmap-mdpi/ic_launcher.png
-          convert assets/logo.png -resize 48x48 StellariumCaller/app/src/main/res/mipmap-mdpi/ic_launcher_round.png
-
-          # hdpi (72x72)
-          convert assets/logo.png -resize 72x72 StellariumCaller/app/src/main/res/mipmap-hdpi/ic_launcher.png
-          convert assets/logo.png -resize 72x72 StellariumCaller/app/src/main/res/mipmap-hdpi/ic_launcher_round.png
-
-          # xhdpi (96x96)
-          convert assets/logo.png -resize 96x96 StellariumCaller/app/src/main/res/mipmap-xhdpi/ic_launcher.png
-          convert assets/logo.png -resize 96x96 StellariumCaller/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png
-
-          # xxhdpi (144x144)
-          convert assets/logo.png -resize 144x144 StellariumCaller/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
-          convert assets/logo.png -resize 144x144 StellariumCaller/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png
-
-          # xxxhdpi (192x192)
-          convert assets/logo.png -resize 192x192 StellariumCaller/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
-          convert assets/logo.png -resize 192x192 StellariumCaller/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png
-
   build-android-capacitor:
     name: Build Android (APK & AAB) - Capacitor
     runs-on: ubuntu-latest

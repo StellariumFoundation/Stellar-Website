@@ -1,6 +1,4 @@
 <script lang="ts">
-  import BookOpen from '@lucide/svelte/icons/book-open';
-
   type Question = { text: string; options: string[]; correctIndex: number };
   type QuizCategory = { name: string; questions: Question[] };
   type QuizSession = { categoryName: string; questions: Question[] };
@@ -124,7 +122,7 @@
   {/if}
 {:else}
     <div class="flex flex-col h-full overflow-y-auto no-scrollbar w-full max-w-5xl lg:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 items-center">
-    <BookOpen size={48} class="text-[var(--color-tertiary)] mt-6 lg:mt-10" />
+    <div class="mt-6 lg:mt-10 text-[var(--color-tertiary)] text-5xl lg:text-6xl leading-none">&#x1F4DA;</div>
     <h1 class="text-3xl lg:text-5xl xl:text-6xl font-normal text-[var(--color-primary)] text-center mt-2 lg:mt-6">Stellarium Knowledge Base</h1>
     <p class="text-center text-[var(--color-on-surface)] mt-4 lg:mt-6 max-w-sm lg:max-w-xl xl:max-w-2xl leading-relaxed text-sm lg:text-base xl:text-lg">
       Master the principles of the Foundation. Select a module below or choose 'General Knowledge' to test yourself on everything.

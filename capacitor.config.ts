@@ -2,7 +2,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'org.stellarium.app',
-  appName: 'Stellarium Foundation',
+  appName: 'Stellarium Foundation App',
   webDir: 'dist',
   server: {
     androidScheme: 'https'

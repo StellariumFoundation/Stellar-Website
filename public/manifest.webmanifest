@@ -3,8 +3,10 @@
   "short_name": "Stellarium",
   "description": "The Stellarium Foundation Ecosystem — explore the library, media, quizzes, and more.",
   "start_url": "/",
+  "scope": "/",
+  "id": "org.stellarium.app",
   "display": "standalone",
-  "background_color": "#0d0015",
+  "background_color": "#1A0033",
   "theme_color": "#0d0015",
   "icons": [
     {

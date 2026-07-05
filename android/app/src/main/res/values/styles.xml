@@ -22,5 +22,7 @@
         <item name="android:statusBarColor">@color/stellarium_status_bar</item>
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:navigationBarColor">@color/stellarium_nav_bar</item>
+        <item name="android:windowSplashScreenBackground">@color/stellarium_splash_bg</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
     </style>
 </resources>

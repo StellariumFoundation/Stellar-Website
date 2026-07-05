@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Stellarium Foundation</string>
+    <string name="app_name">Stellarium Foundation App</string>
     <string name="title_activity_main">Stellarium</string>
     <string name="package_name">org.stellarium.app</string>
     <string name="custom_url_scheme">org.stellarium.app</string>

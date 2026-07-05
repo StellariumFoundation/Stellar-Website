@@ -8,6 +8,7 @@
     "start": "bun ws-server.ts",
     "build": "bun bun-server.ts --build",
     "icons": "bun run scripts/generate-icons.ts",
+    "icons:circle": "bun run scripts/generate-circular-icon.ts && bunx @capacitor/assets generate --android --ios --pwa",
     "icons:stellar": "bun run scripts/generate-stellarium-icons.ts",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",

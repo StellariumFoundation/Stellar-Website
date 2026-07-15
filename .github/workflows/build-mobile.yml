@@ -1,0 +1,326 @@
+name: Build Mobile & Web App (Android, iOS & Web)
+
+on:
+  push:
+    branches: [ "main", "master" ]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-android-capacitor:
+    name: Build Android (APK & AAB)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v5
+        with:
+          java-version: '26'
+          distribution: 'zulu'
+          cache: 'gradle'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install Dependencies
+        run: bun install
+
+      - name: Compile Web App
+        run: bun run build
+
+      - name: Sync Capacitor Android
+        run: bun run cap sync android
+
+      - name: Ensure gradle-wrapper.jar is Valid
+        run: |
+          if ! unzip -t android/gradle/wrapper/gradle-wrapper.jar &>/dev/null; then
+            echo "gradle-wrapper.jar is corrupt, downloading fresh copy..."
+            rm -f android/gradle/wrapper/gradle-wrapper.jar
+            curl -fsSL "https://github.com/gradle/gradle/raw/v9.4.1/gradle/wrapper/gradle-wrapper.jar" \
+              -o android/gradle/wrapper/gradle-wrapper.jar
+            chmod 644 android/gradle/wrapper/gradle-wrapper.jar
+          fi
+
+      - name: Grant Execute Permissions for Gradle
+        run: chmod +x android/gradlew
+
+      - name: Decode Keystore & Set Signing Env
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > android/app/keystore.jks
+          echo "KEYSTORE_PATH=$GITHUB_WORKSPACE/android/app/keystore.jks" >> $GITHUB_ENV
+          echo "KEYSTORE_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }}" >> $GITHUB_ENV
+          echo "KEY_ALIAS=${{ secrets.KEY_ALIAS }}" >> $GITHUB_ENV
+          echo "KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}" >> $GITHUB_ENV
+
+      - name: Build Release APK & AAB
+        run: |
+          cd android
+          ./gradlew assembleRelease bundleRelease
+
+      - name: List Build Outputs
+        run: find android/app/build/outputs -type f \( -name "*.apk" -o -name "*.aab" \)
+
+      - name: Stage Android Artifacts
+        run: |
+          mkdir -p artifacts-to-upload
+          find android -name "*.apk" -type f -exec cp {} artifacts-to-upload/ \;
+          find android -name "*.aab" -type f -exec cp {} artifacts-to-upload/ \;
+
+      - name: Upload Release APK/AAB Artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: android-capacitor-artifacts
+          path: artifacts-to-upload/*
+          if-no-files-found: error
+
+  build-ios:
+    name: Build iOS (Simulator)
+    runs-on: macos-26
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install Dependencies
+        run: bun install
+
+      - name: Compile Web App
+        run: bun run build
+
+      - name: Sync Capacitor iOS
+        run: bun run cap sync ios
+
+      - name: Compile Xcode Project
+        run: |
+          if [ -f "ios/App/App.xcworkspace" ]; then
+            WORKSPACE_FLAG="-workspace ios/App/App.xcworkspace"
+          else
+            WORKSPACE_FLAG="-project ios/App/App.xcodeproj"
+          fi
+          xcodebuild \
+            $WORKSPACE_FLAG \
+            -scheme App \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            clean build
+
+      - name: Package Simulator App Bundle
+        run: |
+          mkdir -p ios-build
+          cp -r build/Build/Products/Debug-iphonesimulator/App.app ios-build/Stellarium.app
+          zip -r ios-build/Stellarium-iOS-Simulator.zip ios-build/Stellarium.app
+
+      - name: Stage iOS Artifacts
+        run: |
+          mkdir -p artifacts-to-upload
+          cp ios-build/Stellarium-iOS-Simulator.zip artifacts-to-upload/
+
+      - name: Upload iOS Simulator Binary
+        uses: actions/upload-artifact@v7
+        with:
+          name: ios-simulator-build
+          path: artifacts-to-upload/*
+          if-no-files-found: error
+
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    needs: [build-android-capacitor, build-ios]
+    if: github.event_name == 'push' && !startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+
+      - name: Extract Version
+        id: version
+        run: |
+          echo "app_version=v$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+
+      - name: Download All Artifacts
+        uses: actions/download-artifact@v8
+        with:
+          path: artifacts
+
+      - name: Rename Artifacts for Release
+        env:
+          TAG: ${{ steps.version.outputs.app_version }}
+        run: |
+          mkdir -p release-files
+
+          # Android (Capacitor)
+          APK_FILE=$(find artifacts/android-capacitor-artifacts -name "*.apk" -type f 2>/dev/null | head -1)
+          if [ -n "$APK_FILE" ]; then
+            cp "$APK_FILE" "release-files/Stellarium-Android-$TAG.apk"
+          fi
+          AAB_FILE=$(find artifacts/android-capacitor-artifacts -name "*.aab" -type f 2>/dev/null | head -1)
+          if [ -n "$AAB_FILE" ]; then
+            cp "$AAB_FILE" "release-files/Stellarium-Android-$TAG.aab"
+          fi
+
+          # iOS
+          IOS_ZIP=$(find artifacts/ios-simulator-build -name "*.zip" -type f 2>/dev/null | head -1)
+          if [ -n "$IOS_ZIP" ]; then
+            cp "$IOS_ZIP" "release-files/Stellarium-iOS-Simulator-$TAG.zip"
+          fi
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ steps.version.outputs.app_version }}
+          name: ${{ steps.version.outputs.app_version }}
+          make_latest: true
+          body: |
+            # Now Available — ${{ steps.version.outputs.app_version }}
+
+            ## Stellarium Foundation
+
+            An institution to propel global wealth creation and wellness through innovative technology, strategic advising, and sovereign enterprise.
+
+            ### Install the App
+
+            | Platform | Download |
+            |----------|----------|
+            | 📱 **Android** | [APK](https://github.com/${{ github.repository }}/releases/download/${{ steps.version.outputs.app_version }}/Stellarium-Android-${{ steps.version.outputs.app_version }}.apk) · [AAB](https://github.com/${{ github.repository }}/releases/download/${{ steps.version.outputs.app_version }}/Stellarium-Android-${{ steps.version.outputs.app_version }}.aab) |
+
+            | 🍏 **iOS** (Simulator) | [ZIP](https://github.com/${{ github.repository }}/releases/download/${{ steps.version.outputs.app_version }}/Stellarium-iOS-Simulator-${{ steps.version.outputs.app_version }}.zip) |
+            | 🌐 **Web / PWA** | [stellarium.app](https://stellarium.app) |
+
+            ---
+
+            ### What's Inside
+
+            - **📚 Stellarium Library** — Access foundational texts, strategy documents, and sovereign blueprints.
+            - **🎬 Media & Broadcasts** — Watch presentations, tutorials, and strategic briefings.
+            - **❓ Interactive Quizzes** — Test your knowledge of wealth systems and governance models.
+            - **💰 Sponsor & Support** — Contribute directly and track your impact on global initiatives.
+            - **✉️ Secure Contact** — Encrypted channels with anonymous whistleblower portal.
+            - **🛡️ Sovereign Tools** — Tor-secured messaging, WeChat, and decentralized communication.
+
+            ### The Water Suite
+
+            | Product | Description |
+            |---------|-------------|
+            | **Water Company** | Autonomous AI companies with specialized agents as your digital workforce |
+            | **Water Classroom** | AI-powered school with interactive content and 24/7 tutoring |
+            | **Water AI** | Unified AI Supermodel aggregating the world's best specialized AI |
+            | **Water Economics** | AI economic model that validates theories and simulates policy impacts |
+            | **Water Robotics** | Teleoperated robots controlled via VR for construction and mining |
+            | **Water AI Fluid** | Decentralized computing network for autonomous AI agents |
+            | **Water Coach** | AI personal productivity coach with real-time guidance |
+            | **Water Gov** | Super app for government services with AI-guided processes |
+
+            ---
+
+            > **Do Good, Make Money, Have Fun.**
+            >
+            > © 2026 Stellarium Foundation — All rights reserved.
+          files: release-files/*
+
+  versioned-release:
+    name: Create Versioned Release
+    runs-on: ubuntu-latest
+    needs: [build-android-capacitor, build-ios]
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+
+      - name: Extract Version
+        id: version
+        run: |
+          echo "app_version=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+
+      - name: Download All Artifacts
+        uses: actions/download-artifact@v8
+        with:
+          path: artifacts
+
+      - name: Rename Artifacts for Release
+        env:
+          TAG: ${{ steps.version.outputs.app_version }}
+        run: |
+          mkdir -p release-files
+
+          APK_FILE=$(find artifacts/android-capacitor-artifacts -name "*.apk" -type f 2>/dev/null | head -1)
+          if [ -n "$APK_FILE" ]; then
+            cp "$APK_FILE" "release-files/Stellarium-Android-$TAG.apk"
+          fi
+          AAB_FILE=$(find artifacts/android-capacitor-artifacts -name "*.aab" -type f 2>/dev/null | head -1)
+          if [ -n "$AAB_FILE" ]; then
+            cp "$AAB_FILE" "release-files/Stellarium-Android-$TAG.aab"
+          fi
+
+          IOS_ZIP=$(find artifacts/ios-simulator-build -name "*.zip" -type f 2>/dev/null | head -1)
+          if [ -n "$IOS_ZIP" ]; then
+            cp "$IOS_ZIP" "release-files/Stellarium-iOS-Simulator-$TAG.zip"
+          fi
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ steps.version.outputs.app_version }}
+          name: ${{ steps.version.outputs.app_version }}
+          body: |
+            # Now Available — ${{ steps.version.outputs.app_version }}
+
+            ## Stellarium Foundation
+
+            An institution to propel global wealth creation and wellness through innovative technology, strategic advising, and sovereign enterprise.
+
+            ### Install the App
+
+            | Platform | Download |
+            |----------|----------|
+            | 📱 **Android** | [APK](https://github.com/${{ github.repository }}/releases/download/${{ steps.version.outputs.app_version }}/Stellarium-Android-${{ steps.version.outputs.app_version }}.apk) · [AAB](https://github.com/${{ github.repository }}/releases/download/${{ steps.version.outputs.app_version }}/Stellarium-Android-${{ steps.version.outputs.app_version }}.aab) |
+
+            | 🍏 **iOS** (Simulator) | [ZIP](https://github.com/${{ github.repository }}/releases/download/${{ steps.version.outputs.app_version }}/Stellarium-iOS-Simulator-${{ steps.version.outputs.app_version }}.zip) |
+            | 🌐 **Web / PWA** | [stellarium.app](https://stellarium.app) |
+
+            ---
+
+            ### What's Inside
+
+            - **📚 Stellarium Library** — Access foundational texts, strategy documents, and sovereign blueprints.
+            - **🎬 Media & Broadcasts** — Watch presentations, tutorials, and strategic briefings.
+            - **❓ Interactive Quizzes** — Test your knowledge of wealth systems and governance models.
+            - **💰 Sponsor & Support** — Contribute directly and track your impact on global initiatives.
+            - **✉️ Secure Contact** — Encrypted channels with anonymous whistleblower portal.
+            - **🛡️ Sovereign Tools** — Tor-secured messaging, WeChat, and decentralized communication.
+
+            ### The Water Suite
+
+            | Product | Description |
+            |---------|-------------|
+            | **Water Company** | Autonomous AI companies with specialized agents as your digital workforce |
+            | **Water Classroom** | AI-powered school with interactive content and 24/7 tutoring |
+            | **Water AI** | Unified AI Supermodel aggregating the world's best specialized AI |
+            | **Water Economics** | AI economic model that validates theories and simulates policy impacts |
+            | **Water Robotics** | Teleoperated robots controlled via VR for construction and mining |
+            | **Water AI Fluid** | Decentralized computing network for autonomous AI agents |
+            | **Water Coach** | AI personal productivity coach with real-time guidance |
+            | **Water Gov** | Super app for government services with AI-guided processes |
+
+            ---
+
+            > **Do Good, Make Money, Have Fun.**
+            >
+            > © 2026 Stellarium Foundation — All rights reserved.
+          files: release-files/*

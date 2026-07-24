@@ -1,4 +1,4 @@
-const CACHE = 'stellarium-v3';
+const CACHE = 'stellarium-v4';
 const STATIC_ASSETS = [
   '/',
   '/index.html',

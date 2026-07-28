@@ -46,18 +46,33 @@
       </ul>
     </section>
 
+    <section class="bg-white/5 border border-white/10 rounded-lg p-4 sm:p-6 lg:p-8">
+      <h2 class="text-white text-lg lg:text-xl font-normal mb-3 flex items-center gap-2">
+        <span class="text-red-400 text-xl">&#9888;</span> Zero-Logging Policy
+      </h2>
+      <p class="font-medium text-white">We operate a strict no-logging policy. We do not keep any logs of:</p>
+      <ul class="list-disc pl-5 space-y-1 mt-3">
+        <li>Voice communication data or audio recordings</li>
+        <li>Connection timestamps or session durations</li>
+        <li>IP addresses or network metadata</li>
+        <li>Device identifiers or usage patterns</li>
+        <li>User activity or browsing behavior on our Service</li>
+      </ul>
+      <p class="mt-3">Our relay server processes audio ephemerally in memory for the sole purpose of real-time transmission. No data is written to disk, logged, or retained after transmission completes. We have designed our infrastructure from the ground up with privacy as the default.</p>
+    </section>
+
     <section>
-      <h2 class="text-white text-lg lg:text-xl font-normal mb-3">3. Microphone Access and Voice Communications</h2>
+      <h2 class="text-white text-lg lg:text-xl font-normal mb-3">5. Microphone Access and Voice Communications</h2>
       <p>The Service provides walkie-talkie-style voice communication ("Voice Calls"). This functionality requires access to your device's microphone.</p>
 
-      <h3 class="text-white text-base font-normal mb-2 mt-4">3.1 How We Use Microphone Access</h3>
+      <h3 class="text-white text-base font-normal mb-2 mt-4">5.1 How We Use Microphone Access</h3>
       <ul class="list-disc pl-5 space-y-1">
         <li>Microphone access is used exclusively for real-time voice communication during active calls.</li>
         <li>Audio is captured only when you actively press and hold the "Push-to-Talk" (PTT) button.</li>
         <li>No audio is captured, recorded, or transmitted when you are not actively using the PTT feature.</li>
       </ul>
 
-      <h3 class="text-white text-base font-normal mb-2 mt-4">3.2 Data Processing and Retention</h3>
+      <h3 class="text-white text-base font-normal mb-2 mt-4">5.2 Data Processing and Retention</h3>
       <ul class="list-disc pl-5 space-y-1">
         <li>Voice audio is transmitted in real-time over encrypted channels (WSS/HTTPS).</li>
         <li>Audio data is <strong>not recorded, logged, or stored</strong> on our servers at any time.</li>
@@ -65,12 +80,12 @@
         <li>Once a transmission is completed, the audio data is permanently discarded from server memory.</li>
       </ul>
 
-      <h3 class="text-white text-base font-normal mb-2 mt-4">3.3 Permission Control</h3>
+      <h3 class="text-white text-base font-normal mb-2 mt-4">5.3 Permission Control</h3>
       <p>You may revoke microphone access at any time through your device settings. If you revoke access, voice calling functionality will be unavailable, but all other features of the Service will continue to operate normally.</p>
     </section>
 
     <section>
-      <h2 class="text-white text-lg lg:text-xl font-normal mb-3">4. Legal Basis for Processing (GDPR)</h2>
+      <h2 class="text-white text-lg lg:text-xl font-normal mb-3">6. Legal Basis for Processing (GDPR)</h2>
       <p>If you are located in the European Economic Area (EEA) or the United Kingdom, our legal basis for collecting and using your personal information depends on the type of data and the context in which we collect it.</p>
       <ul class="list-disc pl-5 space-y-1 mt-3">
         <li><strong>Consent:</strong> We process your information when you have given us explicit consent to do so (e.g., when you grant microphone permission or submit a contact form).</li>
@@ -80,7 +95,7 @@
     </section>
 
     <section>
-      <h2 class="text-white text-lg lg:text-xl font-normal mb-3">5. Data Retention</h2>
+      <h2 class="text-white text-lg lg:text-xl font-normal mb-3">7. Data Retention</h2>
       <p>We retain your information only as long as necessary to fulfill the purposes described in this Privacy Policy:</p>
       <ul class="list-disc pl-5 space-y-1 mt-3">
         <li><strong>Contact Form Submissions:</strong> Email and message content are forwarded to us via StaticForms and retained in our email records until you request deletion.</li>
@@ -90,7 +105,7 @@
     </section>
 
     <section>
-      <h2 class="text-white text-lg lg:text-xl font-normal mb-3">6. Data Sharing and Disclosure</h2>
+      <h2 class="text-white text-lg lg:text-xl font-normal mb-3">8. Data Sharing and Disclosure</h2>
       <p>We do not sell, trade, or share your personal information with third parties except in the following circumstances:</p>
       <ul class="list-disc pl-5 space-y-1 mt-3">
         <li><strong>Service Providers:</strong> We use StaticForms to process contact form submissions. StaticForms acts as a data processor and is contractually obligated to protect your data. View their privacy policy at <a href="https://staticforms.dev/privacy" target="_blank" rel="noopener noreferrer" class="text-[var(--color-tertiary)] underline">staticforms.dev/privacy</a>.</li>
@@ -100,7 +115,7 @@
     </section>
 
     <section>
-      <h2 class="text-white text-lg lg:text-xl font-normal mb-3">7. Data Security</h2>
+      <h2 class="text-white text-lg lg:text-xl font-normal mb-3">9. Data Security</h2>
       <p>We implement appropriate technical and organizational measures to protect your information:</p>
       <ul class="list-disc pl-5 space-y-1 mt-3">
         <li>All communications are encrypted in transit using TLS 1.3 (HTTPS) and WSS protocols.</li>
@@ -112,10 +127,10 @@
     </section>
 
     <section>
-      <h2 class="text-white text-lg lg:text-xl font-normal mb-3">8. Your Rights</h2>
+      <h2 class="text-white text-lg lg:text-xl font-normal mb-3">10. Your Rights</h2>
       <p>Depending on your jurisdiction, you may have the following rights regarding your personal information:</p>
 
-      <h3 class="text-white text-base font-normal mb-2 mt-4">8.1 For EEA/UK Users (GDPR)</h3>
+      <h3 class="text-white text-base font-normal mb-2 mt-4">10.1 For EEA/UK Users (GDPR)</h3>
       <ul class="list-disc pl-5 space-y-1">
         <li><strong>Right to Access:</strong> Request a copy of the personal data we hold about you.</li>
         <li><strong>Right to Rectification:</strong> Request correction of inaccurate or incomplete data.</li>
@@ -126,7 +141,7 @@
         <li><strong>Right to Withdraw Consent:</strong> Withdraw consent at any time where we rely on consent to process your data.</li>
       </ul>
 
-      <h3 class="text-white text-base font-normal mb-2 mt-4">8.2 For California Users (CCPA)</h3>
+      <h3 class="text-white text-base font-normal mb-2 mt-4">10.2 For California Users (CCPA)</h3>
       <ul class="list-disc pl-5 space-y-1">
         <li><strong>Right to Know:</strong> Request disclosure of the categories and specific pieces of personal information we have collected.</li>
         <li><strong>Right to Delete:</strong> Request deletion of personal information we have collected.</li>
@@ -134,22 +149,22 @@
         <li><strong>Right to Non-Discrimination:</strong> We will not discriminate against you for exercising any of your CCPA rights.</li>
       </ul>
 
-      <h3 class="text-white text-base font-normal mb-2 mt-4">8.3 How to Exercise Your Rights</h3>
+      <h3 class="text-white text-base font-normal mb-2 mt-4">10.3 How to Exercise Your Rights</h3>
       <p>To exercise any of these rights, contact us at <span class="text-[var(--color-tertiary)]">{contactEmail}</span>. We will respond to your request within 30 days.</p>
     </section>
 
     <section>
-      <h2 class="text-white text-lg lg:text-xl font-normal mb-3">9. Children's Privacy</h2>
+      <h2 class="text-white text-lg lg:text-xl font-normal mb-3">11. Children's Privacy</h2>
       <p>Our Service is not directed to individuals under the age of 13 (or 16 in the EEA/UK). We do not knowingly collect personal information from children. If we become aware that a child has provided us with personal data, we will take steps to delete such information promptly. If you believe a child has provided us with personal data, please contact us immediately.</p>
     </section>
 
     <section>
-      <h2 class="text-white text-lg lg:text-xl font-normal mb-3">10. International Data Transfers</h2>
+      <h2 class="text-white text-lg lg:text-xl font-normal mb-3">12. International Data Transfers</h2>
       <p>Your information may be transferred to and processed in countries other than your country of residence. These countries may have data protection laws that differ from those in your jurisdiction. When we transfer your data internationally, we ensure appropriate safeguards are in place, including Standard Contractual Clauses approved by the European Commission where required.</p>
     </section>
 
     <section>
-      <h2 class="text-white text-lg lg:text-xl font-normal mb-3">11. Third-Party Services</h2>
+      <h2 class="text-white text-lg lg:text-xl font-normal mb-3">13. Third-Party Services</h2>
       <p>The Service integrates with the following third-party services:</p>
       <ul class="list-disc pl-5 space-y-1 mt-3">
         <li><strong>StaticForms:</strong> Processes contact form submissions. StaticForms does not store submitted data permanently. See their privacy policy at <a href="https://staticforms.dev/privacy" target="_blank" rel="noopener noreferrer" class="text-[var(--color-tertiary)] underline">staticforms.dev/privacy</a>.</li>
@@ -160,7 +175,7 @@
     </section>
 
     <section>
-      <h2 class="text-white text-lg lg:text-xl font-normal mb-3">12. Changes to This Privacy Policy</h2>
+      <h2 class="text-white text-lg lg:text-xl font-normal mb-3">14. Changes to This Privacy Policy</h2>
       <p>We may update this Privacy Policy from time to time. We will notify you of any changes by:</p>
       <ul class="list-disc pl-5 space-y-1 mt-3">
         <li>Posting the new Privacy Policy on this page.</li>
@@ -171,7 +186,7 @@
     </section>
 
     <section>
-      <h2 class="text-white text-lg lg:text-xl font-normal mb-3">13. Contact Information</h2>
+      <h2 class="text-white text-lg lg:text-xl font-normal mb-3">15. Contact Information</h2>
       <p>If you have any questions, concerns, or requests regarding this Privacy Policy or our data practices, please contact us:</p>
       <ul class="list-disc pl-5 space-y-1 mt-3">
         <li><strong>Email:</strong> <span class="text-[var(--color-tertiary)]">{contactEmail}</span></li>

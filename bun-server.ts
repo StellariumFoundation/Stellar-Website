@@ -88,6 +88,16 @@ async function performBuild(isProduction: boolean) {
     console.warn('[Bun Build] Copying icons folder warning:', err);
   }
 
+  try {
+    // SPA fallback for static hosts without rewrites: serve the full app shell
+    // for any unknown path (GitHub Pages, Nginx, etc.) so deep links like
+    // /privacy render via the client-side router instead of 404ing.
+    const builtHtml = await Bun.file('./dist/index.html').text();
+    await Bun.write('./dist/404.html', builtHtml);
+  } catch (err) {
+    console.warn('[Bun Build] Writing 404.html fallback warning:', err);
+  }
+
   console.log('[Bun Build] Build completed successfully.');
   return true;
 }
